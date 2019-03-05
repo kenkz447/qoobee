@@ -1,2 +1,2 @@
-import { RootProps } from './core';
-export declare const render: (rootElement: HTMLElement, rootProps: RootProps<import("./core").AppCoreContext<{}>>) => void;
+import { RootProps } from './app';
+export declare const render: (rootElement: HTMLElement, rootProps: RootProps<import("./app").AppCoreContext<{}>>) => void;

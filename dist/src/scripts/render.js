@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
 const ReactDOM = __importStar(require("react-dom"));
-const core_1 = require("./core");
+const app_1 = require("./app");
 exports.render = (rootElement, rootProps) => {
-    ReactDOM.render(React.createElement(core_1.Root, Object.assign({}, rootProps)), rootElement);
+    ReactDOM.render(React.createElement(app_1.Root, Object.assign({}, rootProps)), rootElement);
 };

@@ -1,9 +1,9 @@
 {
     "name": "qoobee",
-    "version": "0.0.1",
-    "description": "My app!!!",
+    "version": "0.0.3",
+    "description": "Qoobee!!!",
     "main": "dist/index.js",
-    "repository": "github:kenkz447/my-app",
+    "repository": "github:kenkz447/qoobee",
     "scripts": {
         "build:before": "rimraf ./dist",
         "build": "npm run build:before && tsc",

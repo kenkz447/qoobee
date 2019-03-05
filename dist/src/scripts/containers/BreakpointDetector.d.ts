@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BreakPoint } from '../core';
+import { BreakPoint } from '../app';
 export interface BreakpointDetectorProps {
     readonly resolver?: (windowWidth: number) => BreakPoint;
 }

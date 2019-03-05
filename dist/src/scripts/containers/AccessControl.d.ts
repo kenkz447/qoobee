@@ -1,4 +1,4 @@
-import { Policy } from '../core';
+import { Policy } from '../app';
 interface AccessControlProps {
     readonly funcKey?: string;
     readonly policy: Array<Policy | string> | Policy | string;

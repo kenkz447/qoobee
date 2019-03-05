@@ -1,0 +1,40 @@
+{
+    "name": "qoobee",
+    "version": "0.0.1",
+    "description": "My app!!!",
+    "main": "dist/index.js",
+    "repository": "github:kenkz447/my-app",
+    "scripts": {
+        "build:before": "rimraf ./dist",
+        "build": "npm run build:before && tsc",
+        "test": "jest --coverage --config ./jest.config.json"
+    },
+    "keywords": [
+        "react",
+        "typescript",
+        "front-end",
+        "context"
+    ],
+    "author": "kenkz447",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jest": "^23.3.14",
+        "@types/node": "^10.12.29",
+        "@types/react": "^16.8.6",
+        "@types/react-test-renderer": "^16.8.1",
+        "coveralls": "^3.0.3",
+        "jest": "^23.6.0",
+        "react-test-renderer": "^16.8.3",
+        "rimraf": "^2.6.3",
+        "ts-jest": "^23.10.5",
+        "tslint": "^5.13.1",
+        "tslint-react": "^3.6.0",
+        "typescript": "^3.3.3333"
+    },
+    "dependencies": {
+        "react": "^16.8.3",
+        "react-context-service": "^1.2.3",
+        "react-dom": "^16.6.3",
+        "react-router-dom": "^4.3.1"
+    }
+}

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { ServiceWorkerRegistrationProps } from './swRegistration';
-import { AppCoreContext } from './Types';
+import { AppCoreContext, ServiceWorkerRegistrationProps } from '../app';
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
-    readonly AppContent: React.ComponentType;
+    readonly AppContent: () => React.ReactNode;
     readonly initialContext: Partial<Context>;
     readonly SWRegistrationProps: ServiceWorkerRegistrationProps;
 }

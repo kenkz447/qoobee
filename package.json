@@ -1,6 +1,6 @@
 {
     "name": "qoobee",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "description": "Qoobee!!!",
     "main": "dist/index.js",
     "repository": "github:kenkz447/qoobee",
@@ -32,6 +32,7 @@
         "typescript": "^3.3.3333"
     },
     "dependencies": {
+        "history": "^4.7.2",
         "react": "^16.8.3",
         "react-context-service": "^1.2.3",
         "react-dom": "^16.6.3",

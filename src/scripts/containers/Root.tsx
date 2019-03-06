@@ -2,13 +2,14 @@ import * as React from 'react';
 import { ContextCreator } from 'react-context-service';
 
 import {
+    AppCoreContext,
     ServiceWorkerRegistrationProps,
     swRegistration
-} from './swRegistration';
-import { AppCoreContext } from './Types';
+} from '../app';
+import HistoryMiddleware from './HistoryMiddleware';
 
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
-    readonly AppContent: React.ComponentType;
+    readonly AppContent: () => React.ReactNode;
     readonly initialContext: Partial<Context>;
     readonly SWRegistrationProps: ServiceWorkerRegistrationProps;
 }
@@ -33,7 +34,9 @@ export class Root extends React.Component<RootProps> {
                 context={RootContext}
                 initContextValue={initialContext}
             >
-                <AppContent />
+                <HistoryMiddleware>
+                    {AppContent}
+                </HistoryMiddleware>
             </ContextCreator>
         );
     }

@@ -5,7 +5,9 @@ import { AppCoreContext, Policy } from '../app';
 interface AccessControlProps {
     readonly funcKey?: string;
     readonly policy: Array<Policy | string> | Policy | string;
-    readonly children: React.ReactNode | ((canAccess: boolean) => React.ReactNode);
+    readonly children: React.ReactNode | (() => React.ReactNode);
+    readonly values?: any;
+    readonly renderDeny?: () => React.ComponentType;
 }
 
 type WithPolicies = Pick<AppCoreContext, 'policies'>;
@@ -24,10 +26,18 @@ function policyIsAllowed(
 }
 
 function AccessControl(props: WithContextProps<WithPolicies, AccessControlProps>) {
-    const { funcKey, policy, children, policies, getContext } = props;
+    const {
+        funcKey,
+        policy,
+        children,
+        policies,
+        getContext,
+        renderDeny
+    } = props;
+
     if (!policies) {
-        if (typeof children === 'function') {
-            return children(false);
+        if (typeof renderDeny === 'function') {
+            return renderDeny();
         }
 
         return null;
@@ -44,15 +54,15 @@ function AccessControl(props: WithContextProps<WithPolicies, AccessControlProps>
         isAllowed = policyIsAllowed(policies, funcKey, policy, appContext);
     }
 
-    if (typeof children === 'function') {
-        return children(isAllowed);
-    }
-
     if (!isAllowed) {
+        if (typeof renderDeny === 'function') {
+            return renderDeny();
+        }
+
         return null;
     }
 
-    return children;
+    return typeof children === 'function' ? children() : children;
 }
 
 export default withContext<AppCoreContext, AccessControlProps>('policies')(AccessControl);

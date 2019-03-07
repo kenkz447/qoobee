@@ -8,10 +8,10 @@ function policyIsAllowed(policies, funcKey, policy, appContext) {
     return policies[policy] ? policies[policy](appContext, funcKey) : false;
 }
 function AccessControl(props) {
-    const { funcKey, policy, children, policies, getContext } = props;
+    const { funcKey, policy, children, policies, getContext, renderDeny } = props;
     if (!policies) {
-        if (typeof children === 'function') {
-            return children(false);
+        if (typeof renderDeny === 'function') {
+            return renderDeny();
         }
         return null;
     }
@@ -25,12 +25,12 @@ function AccessControl(props) {
     else {
         isAllowed = policyIsAllowed(policies, funcKey, policy, appContext);
     }
-    if (typeof children === 'function') {
-        return children(isAllowed);
-    }
     if (!isAllowed) {
+        if (typeof renderDeny === 'function') {
+            return renderDeny();
+        }
         return null;
     }
-    return children;
+    return typeof children === 'function' ? children() : children;
 }
 exports.default = react_context_service_1.withContext('policies')(AccessControl);

@@ -1,7 +1,7 @@
 import { History } from 'history';
 import { RouteProps } from 'react-router';
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export declare type Policy = (context: {}, funcKey?: string) => boolean;
+export declare type Policy = (context: {}, funcKey?: string, values?: {}) => boolean;
 export declare type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export interface MenuItem {
     readonly url: string;

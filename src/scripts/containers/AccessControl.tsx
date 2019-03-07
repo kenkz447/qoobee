@@ -16,10 +16,11 @@ function policyIsAllowed(
     policies: WithPolicies['policies'],
     funcKey: string | undefined,
     policy: string | Policy,
+    values: any,
     appContext: {}
 ) {
     if (typeof policy === 'function') {
-        return policy(appContext, funcKey);
+        return policy(appContext, funcKey, values);
     }
 
     return policies![policy] ? policies![policy](appContext, funcKey) : false;
@@ -32,7 +33,8 @@ function AccessControl(props: WithContextProps<WithPolicies, AccessControlProps>
         children,
         policies,
         getContext,
-        renderDeny
+        renderDeny,
+        values
     } = props;
 
     if (!policies) {
@@ -48,10 +50,10 @@ function AccessControl(props: WithContextProps<WithPolicies, AccessControlProps>
     let isAllowed: boolean = true;
     if (Array.isArray(policy)) {
         for (const policyName of policy) {
-            isAllowed = policyIsAllowed(policies, funcKey, policyName, appContext);
+            isAllowed = policyIsAllowed(policies, funcKey, policyName, values, appContext);
         }
     } else {
-        isAllowed = policyIsAllowed(policies, funcKey, policy, appContext);
+        isAllowed = policyIsAllowed(policies, funcKey, policy, values, appContext);
     }
 
     if (!isAllowed) {

@@ -11,7 +11,7 @@ import HistoryMiddleware from './HistoryMiddleware';
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
     readonly AppContent: () => React.ReactNode;
     readonly initialContext: Partial<Context>;
-    readonly SWRegistrationProps: ServiceWorkerRegistrationProps;
+    readonly SWRegistrationProps?: ServiceWorkerRegistrationProps;
 }
 
 export const RootContext = React.createContext({});

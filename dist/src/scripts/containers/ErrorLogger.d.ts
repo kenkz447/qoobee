@@ -5,8 +5,8 @@ export interface ErrorPageProps {
 }
 interface ErrorLoggerProps {
     readonly ErrorPage: React.ComponentType<ErrorPageProps>;
-    readonly setup: () => void;
-    readonly onError: (props: {
+    readonly setup?: () => void;
+    readonly onError?: (props: {
         readonly error: Error | null;
         readonly errorInfo?: object;
     }) => void;

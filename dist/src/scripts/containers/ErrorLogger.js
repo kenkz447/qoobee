@@ -19,6 +19,9 @@ class ErrorLogger extends React.PureComponent {
         if (!loggerEnabled) {
             return;
         }
+        if (!props.setup) {
+            return;
+        }
         props.setup();
     }
     componentDidUpdate() {
@@ -26,7 +29,11 @@ class ErrorLogger extends React.PureComponent {
         if (!loggerEnabled) {
             return;
         }
-        this.props.onError({
+        const { onError } = this.props;
+        if (!onError) {
+            return;
+        }
+        onError({
             error,
             errorInfo
         });

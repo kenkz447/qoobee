@@ -44,12 +44,12 @@ export interface Menu<P = {}> {
 export interface Permission {
     readonly key: string;
     readonly url?: RegExp;
-    readonly reinforced?: boolean;
 }
 
 export interface Role {
     readonly key: string;
     readonly defaultUrl?: string;
     readonly allowed: Permission[];
+    readonly denied?: Permission[];
     readonly redirects?: Array<{ readonly test: RegExp; readonly target: string; }>;
 }

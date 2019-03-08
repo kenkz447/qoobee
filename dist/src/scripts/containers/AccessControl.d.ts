@@ -4,7 +4,7 @@ interface AccessControlProps {
     readonly policy: Array<Policy | string> | Policy | string;
     readonly children: React.ReactNode | (() => React.ReactNode);
     readonly values?: any;
-    readonly renderDeny?: () => React.ComponentType;
+    readonly renderDeny?: () => React.ReactNode;
 }
 declare const _default: {
     new (props: Readonly<AccessControlProps>): {

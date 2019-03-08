@@ -27,12 +27,7 @@ exports.route = (Component) => {
     });
     if (routeProps.policies) {
         return (React.createElement(react_router_dom_1.Route, Object.assign({ key: routeProps.path }, routeProps), (componentProps) => {
-            return (React.createElement(AccessControl_1.default, { policy: routeProps.policies }, (canAccess) => {
-                if (!canAccess) {
-                    return React.createElement(react_router_dom_1.Redirect, { to: "/deny" });
-                }
-                return React.createElement(WithContextInject, Object.assign({}, componentProps));
-            }));
+            return (React.createElement(AccessControl_1.default, { policy: routeProps.policies, renderDeny: () => React.createElement(react_router_dom_1.Redirect, { to: "/deny" }) }, () => React.createElement(WithContextInject, Object.assign({}, componentProps))));
         }));
     }
     return (React.createElement(react_router_dom_1.Route, Object.assign({ key: routeProps.path }, routeProps, { component: WithContextInject })));

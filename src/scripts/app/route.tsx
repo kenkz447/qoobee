@@ -38,13 +38,11 @@ export const route = (Component: AppRouteComponent) => {
             <Route key={routeProps.path} {...routeProps}>
                 {(componentProps) => {
                     return (
-                        <AccessControl policy={routeProps.policies!}>
-                            {(canAccess) => {
-                                if (!canAccess) {
-                                    return <Redirect to="/deny" />;
-                                }
-                                return <WithContextInject {...componentProps} />;
-                            }}
+                        <AccessControl
+                            policy={routeProps.policies!}
+                            renderDeny={() => <Redirect to="/deny" />}
+                        >
+                            {() => <WithContextInject {...componentProps} />}
                         </AccessControl>
                     );
                 }}

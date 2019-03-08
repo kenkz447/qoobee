@@ -7,7 +7,7 @@ interface AccessControlProps {
     readonly policy: Array<Policy | string> | Policy | string;
     readonly children: React.ReactNode | (() => React.ReactNode);
     readonly values?: any;
-    readonly renderDeny?: () => React.ComponentType;
+    readonly renderDeny?: () => React.ReactNode;
 }
 
 type WithPolicies = Pick<AppCoreContext, 'policies'>;

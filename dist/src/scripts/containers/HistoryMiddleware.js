@@ -8,6 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const history_1 = require("history");
+const app_1 = require("../app");
 const React = __importStar(require("react"));
 const react_context_service_1 = require("react-context-service");
 class HistoryMiddleware extends React.PureComponent {
@@ -17,6 +18,7 @@ class HistoryMiddleware extends React.PureComponent {
             const originPush = history.push;
             const originReplace = history.replace;
             const nextReplace = function () {
+                app_1.events.emit(app_1.ON_HISTORY_REPLACE, arguments);
                 originReplace.apply(window, arguments);
             };
             const $self = this;
@@ -31,9 +33,12 @@ class HistoryMiddleware extends React.PureComponent {
                     const isRedirect = (currentUserRole && currentUserRole.redirects) &&
                         currentUserRole.redirects.find(r => r.test.test(nextUrl));
                     if (isRedirect) {
-                        originPush.apply(window, [isRedirect.target]);
+                        const args = [isRedirect.target];
+                        app_1.events.emit(app_1.ON_HISTORY_PUSH, args);
+                        originPush.apply(window, args);
                         return;
                     }
+                    app_1.events.emit(app_1.ON_HISTORY_PUSH, arguments);
                     originPush.apply(window, arguments);
                 },
                 replace: nextReplace

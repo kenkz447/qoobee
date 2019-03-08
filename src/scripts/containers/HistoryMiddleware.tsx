@@ -3,7 +3,7 @@ import {
     History,
     LocationDescriptorObject
 } from 'history';
-import { AppCoreContext } from '../app';
+import { AppCoreContext, events, ON_HISTORY_PUSH, ON_HISTORY_REPLACE } from '../app';
 import * as React from 'react';
 import { withContext, WithContextProps } from 'react-context-service';
 
@@ -22,7 +22,7 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
             history: this.createHistory()
         });
     }
-    
+
     public render() {
         const { history, children } = this.props;
 
@@ -38,6 +38,7 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
         const originReplace = history.replace;
 
         const nextReplace = function () {
+            events.emit(ON_HISTORY_REPLACE, arguments);
             originReplace.apply(window, arguments);
         };
 
@@ -57,10 +58,13 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
                     currentUserRole.redirects.find(r => r.test.test(nextUrl));
 
                 if (isRedirect) {
-                    originPush.apply(window, [isRedirect.target]);
+                    const args = [isRedirect.target];
+                    events.emit(ON_HISTORY_PUSH, args);
+                    originPush.apply(window, args);
                     return;
                 }
 
+                events.emit(ON_HISTORY_PUSH, arguments);
                 originPush.apply(window, arguments);
             },
             replace: nextReplace

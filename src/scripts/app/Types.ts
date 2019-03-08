@@ -48,6 +48,7 @@ export interface Permission {
 
 export interface Role {
     readonly key: string;
+    readonly defaultUrl?: string;
     readonly allowed: Permission[];
     readonly redirects?: Array<{ readonly test: RegExp; readonly target: string; }>;
 }

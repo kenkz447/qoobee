@@ -44,6 +44,7 @@ export interface Menu<P = {}> {
 export interface Permission {
     readonly key: string;
     readonly url?: RegExp;
+    readonly reinforced?: boolean;
 }
 
 export interface Role {

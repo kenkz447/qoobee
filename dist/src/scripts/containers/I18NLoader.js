@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,10 +20,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
-const react_context_service_1 = require("react-context-service");
-class I18NLoader extends React.PureComponent {
-    static getDerivedStateFromProps(nextProps, state) {
+var React = __importStar(require("react"));
+var react_context_service_1 = require("react-context-service");
+var I18NLoader = /** @class */ (function (_super) {
+    __extends(I18NLoader, _super);
+    function I18NLoader(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            currentLanguage: props.currentLanguage
+        };
+        localStorage.setItem('lang', _this.state.currentLanguage);
+        return _this;
+    }
+    I18NLoader.getDerivedStateFromProps = function (nextProps, state) {
         if (nextProps.currentLanguage !== state.currentLanguage) {
             return {
                 currentLanguage: nextProps.currentLanguage,
@@ -18,27 +40,21 @@ class I18NLoader extends React.PureComponent {
             };
         }
         return null;
-    }
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentLanguage: props.currentLanguage
-        };
-        localStorage.setItem('lang', this.state.currentLanguage);
-    }
-    componentDidUpdate() {
+    };
+    I18NLoader.prototype.componentDidUpdate = function () {
         if (this.state.needsUpdate) {
             localStorage.setItem('lang', this.state.currentLanguage);
             this.setState({
                 needsUpdate: false
             });
         }
-    }
-    render() {
+    };
+    I18NLoader.prototype.render = function () {
         if (this.state.needsUpdate) {
             return null;
         }
         return this.props.children;
-    }
-}
+    };
+    return I18NLoader;
+}(React.PureComponent));
 exports.default = react_context_service_1.withContext('currentLanguage')(I18NLoader);

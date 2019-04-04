@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,36 +20,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
-const react_context_service_1 = require("react-context-service");
-class BreakpointDetector extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.onWindowResize = () => {
-            const { resolver, setContext } = this.props;
-            const nextBreakpoint = resolver(window.innerWidth);
+var React = __importStar(require("react"));
+var react_context_service_1 = require("react-context-service");
+var BreakpointDetector = /** @class */ (function (_super) {
+    __extends(BreakpointDetector, _super);
+    function BreakpointDetector(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onWindowResize = function () {
+            var _a = _this.props, resolver = _a.resolver, setContext = _a.setContext;
+            var nextBreakpoint = resolver(window.innerWidth);
             setContext({
                 currentBreakpoint: nextBreakpoint
             });
         };
-        this.onWindowResize();
+        _this.onWindowResize();
+        return _this;
     }
-    componentDidMount() {
+    BreakpointDetector.prototype.componentDidMount = function () {
         window.addEventListener('resize', this.onWindowResize);
-    }
-    render() {
+    };
+    BreakpointDetector.prototype.render = function () {
         return this.props.children || null;
-    }
-}
-BreakpointDetector.defaultProps = {
-    resolver: (windowWith) => {
-        if (windowWith >= 1200) {
-            return 'lg';
+    };
+    BreakpointDetector.defaultProps = {
+        resolver: function (windowWith) {
+            if (windowWith >= 1200) {
+                return 'lg';
+            }
+            if (windowWith >= 992) {
+                return 'md';
+            }
+            return 'sm';
         }
-        if (windowWith >= 992) {
-            return 'md';
-        }
-        return 'sm';
-    }
-};
+    };
+    return BreakpointDetector;
+}(React.PureComponent));
 exports.default = react_context_service_1.withContext()(BreakpointDetector);

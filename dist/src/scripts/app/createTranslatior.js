@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createTranslatior = ({ resources }) => {
-    const lang = localStorage.getItem('lang');
-    return (source) => {
+exports.createTranslatior = function (_a) {
+    var resources = _a.resources;
+    var lang = localStorage.getItem('lang');
+    return function (source) {
         if (!lang) {
             return source;
         }

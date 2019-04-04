@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,50 +20,53 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
-class ErrorLogger extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        const loggerEnabled = process.env.NODE_ENV === 'production';
-        this.state = {
+var React = __importStar(require("react"));
+var ErrorLogger = /** @class */ (function (_super) {
+    __extends(ErrorLogger, _super);
+    function ErrorLogger(props) {
+        var _this = _super.call(this, props) || this;
+        var loggerEnabled = process.env.NODE_ENV === 'production';
+        _this.state = {
             error: null,
             loggerEnabled: loggerEnabled
         };
         if (!loggerEnabled) {
-            return;
+            return _this;
         }
         if (!props.setup) {
-            return;
+            return _this;
         }
         props.setup();
+        return _this;
     }
-    componentDidUpdate() {
-        const { loggerEnabled, error, errorInfo } = this.state;
+    ErrorLogger.prototype.componentDidUpdate = function () {
+        var _a = this.state, loggerEnabled = _a.loggerEnabled, error = _a.error, errorInfo = _a.errorInfo;
         if (!loggerEnabled) {
             return;
         }
-        const { onError } = this.props;
+        var onError = this.props.onError;
         if (!onError) {
             return;
         }
         onError({
-            error,
-            errorInfo
+            error: error,
+            errorInfo: errorInfo
         });
-    }
-    componentDidCatch(error, errorInfo) {
+    };
+    ErrorLogger.prototype.componentDidCatch = function (error, errorInfo) {
         this.setState({
             error: error,
             errorInfo: errorInfo
         });
-    }
-    render() {
-        const { error, errorInfo } = this.state;
+    };
+    ErrorLogger.prototype.render = function () {
+        var _a = this.state, error = _a.error, errorInfo = _a.errorInfo;
         if (!error) {
             return this.props.children;
         }
-        const { ErrorPage } = this.props;
+        var ErrorPage = this.props.ErrorPage;
         return React.createElement(ErrorPage, { error: error, errorInfo: errorInfo });
-    }
-}
+    };
+    return ErrorLogger;
+}(React.PureComponent));
 exports.ErrorLogger = ErrorLogger;

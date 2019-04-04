@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,33 +20,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const history_1 = require("history");
-const app_1 = require("../app");
-const React = __importStar(require("react"));
-const react_context_service_1 = require("react-context-service");
-class HistoryMiddleware extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.createHistoryMiddleware = (history) => {
-            const originPush = history.push;
-            const originReplace = history.replace;
-            const nextReplace = function () {
+var history_1 = require("history");
+var app_1 = require("../app");
+var React = __importStar(require("react"));
+var react_context_service_1 = require("react-context-service");
+var HistoryMiddleware = /** @class */ (function (_super) {
+    __extends(HistoryMiddleware, _super);
+    function HistoryMiddleware(props) {
+        var _this = _super.call(this, props) || this;
+        _this.createHistoryMiddleware = function (history) {
+            var originPush = history.push;
+            var originReplace = history.replace;
+            var nextReplace = function () {
                 app_1.events.emit(app_1.ON_HISTORY_REPLACE, arguments);
                 originReplace.apply(window, arguments);
             };
-            const $self = this;
+            var $self = _this;
             return {
                 push: function (next) {
-                    const nextUrl = typeof next === 'string' ? next : next.pathname;
-                    const currentUrl = location.pathname + location.search;
+                    var nextUrl = typeof next === 'string' ? next : next.pathname;
+                    var currentUrl = location.pathname + location.search;
                     if (nextUrl === currentUrl) {
                         return;
                     }
-                    const { currentUserRole } = $self.props;
-                    const isRedirect = (currentUserRole && currentUserRole.redirects) &&
-                        currentUserRole.redirects.find(r => r.test.test(nextUrl));
+                    var currentUserRole = $self.props.currentUserRole;
+                    var isRedirect = (currentUserRole && currentUserRole.redirects) &&
+                        currentUserRole.redirects.find(function (r) { return r.test.test(nextUrl); });
                     if (isRedirect) {
-                        const args = [isRedirect.target];
+                        var args = [isRedirect.target];
                         app_1.events.emit(app_1.ON_HISTORY_PUSH, args);
                         originPush.apply(window, args);
                         return;
@@ -44,8 +58,8 @@ class HistoryMiddleware extends React.PureComponent {
                 replace: nextReplace
             };
         };
-        this.applyHistoryMiddeware = (history, middleWares) => {
-            for (const middleWareKey in middleWares) {
+        _this.applyHistoryMiddeware = function (history, middleWares) {
+            for (var middleWareKey in middleWares) {
                 if (!history.hasOwnProperty(middleWareKey)) {
                     continue;
                 }
@@ -53,22 +67,24 @@ class HistoryMiddleware extends React.PureComponent {
             }
             return history;
         };
-        this.createHistory = () => {
-            const history = history_1.createBrowserHistory();
-            const middleWares = this.createHistoryMiddleware(history);
-            return this.applyHistoryMiddeware(history, middleWares);
+        _this.createHistory = function () {
+            var history = history_1.createBrowserHistory();
+            var middleWares = _this.createHistoryMiddleware(history);
+            return _this.applyHistoryMiddeware(history, middleWares);
         };
-        const { setContext } = props;
+        var setContext = props.setContext;
         setContext({
-            history: this.createHistory()
+            history: _this.createHistory()
         });
+        return _this;
     }
-    render() {
-        const { history, children } = this.props;
+    HistoryMiddleware.prototype.render = function () {
+        var _a = this.props, history = _a.history, children = _a.children;
         if (!history) {
             return null;
         }
         return children();
-    }
-}
+    };
+    return HistoryMiddleware;
+}(React.PureComponent));
 exports.default = react_context_service_1.withContext('history', 'currentUserRole')(HistoryMiddleware);

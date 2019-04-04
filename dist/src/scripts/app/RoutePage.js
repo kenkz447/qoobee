@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,25 +20,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
-class RoutePage extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.setDocumentTitle = () => {
-            document.title = this.title;
+var React = __importStar(require("react"));
+var RoutePage = /** @class */ (function (_super) {
+    __extends(RoutePage, _super);
+    function RoutePage(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setDocumentTitle = function () {
+            document.title = _this.title;
         };
+        _this.setDocumentTitle();
+        return _this;
+    }
+    Object.defineProperty(RoutePage.prototype, "title", {
+        get: function () {
+            var InheritPage = Object.getPrototypeOf(this).constructor;
+            if (!InheritPage.hasOwnProperty('routeInfo')) {
+                return 'Untitle page';
+            }
+            var routeInfo = InheritPage.routeInfo;
+            return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RoutePage.prototype.componentDidUpdate = function () {
         this.setDocumentTitle();
-    }
-    get title() {
-        const InheritPage = Object.getPrototypeOf(this).constructor;
-        if (!InheritPage.hasOwnProperty('routeInfo')) {
-            return 'Untitle page';
-        }
-        const routeInfo = InheritPage.routeInfo;
-        return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
-    }
-    componentDidUpdate() {
-        this.setDocumentTitle();
-    }
-}
+    };
+    return RoutePage;
+}(React.PureComponent));
 exports.RoutePage = RoutePage;

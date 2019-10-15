@@ -5,10 +5,10 @@ import {
 } from 'history';
 import { AppCoreContext, events, ON_HISTORY_PUSH, ON_HISTORY_REPLACE } from '../app';
 import * as React from 'react';
-import { withContext, WithContextProps } from 'react-context-service';
+import { WithContextProps, withContext } from '../libs';
 
 interface HistoryMiddlewareOwnProps {
-    readonly children: () => React.ReactNode;
+    readonly children: React.ReactNode;
 }
 
 type HistoryMiddlewareProps = WithContextProps<AppCoreContext, HistoryMiddlewareOwnProps>;
@@ -30,7 +30,7 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
             return null;
         }
 
-        return children();
+        return children;
     }
 
     private readonly createHistoryMiddleware = (history: History<{}>) => {
@@ -53,12 +53,13 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
                 }
 
                 const { currentUserRole } = $self.props;
+                const hasRedirects = (currentUserRole && currentUserRole.redirects);
 
-                const isRedirect = (currentUserRole && currentUserRole.redirects) &&
-                    currentUserRole.redirects.find(r => r.test.test(nextUrl));
+                const redirectTarget = hasRedirects &&
+                    currentUserRole!.redirects!.find(r => r.test.test(nextUrl));
 
-                if (isRedirect) {
-                    const args = [isRedirect.target];
+                if (redirectTarget) {
+                    const args = [redirectTarget.target];
                     events.emit(ON_HISTORY_PUSH, args);
                     originPush.apply(window, args);
                     return;

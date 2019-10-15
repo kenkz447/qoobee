@@ -1,20 +1,19 @@
 import * as React from 'react';
-import { ContextCreator } from 'react-context-service';
 
 import {
     AppCoreContext,
     ServiceWorkerRegistrationProps,
-    swRegistration
+    swRegistration,
+    RootContext
 } from '../app';
 import HistoryMiddleware from './HistoryMiddleware';
+import { ContextFactory } from '../libs';
 
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
-    readonly AppContent: () => React.ReactNode;
+    readonly renderApp: () => React.ReactNode;
     readonly initialContext: Partial<Context>;
     readonly SWRegistrationProps?: ServiceWorkerRegistrationProps;
 }
-
-export const RootContext = React.createContext({});
 
 export class Root extends React.Component<RootProps> {
     public componentDidMount() {
@@ -27,17 +26,17 @@ export class Root extends React.Component<RootProps> {
     }
 
     public render() {
-        const { AppContent, initialContext } = this.props;
+        const { renderApp, initialContext } = this.props;
 
         return (
-            <ContextCreator
+            <ContextFactory
                 context={RootContext}
                 initContextValue={initialContext}
             >
                 <HistoryMiddleware>
-                    {AppContent}
+                    {renderApp()}
                 </HistoryMiddleware>
-            </ContextCreator>
+            </ContextFactory>
         );
     }
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { withContext, WithContextProps } from 'react-context-service';
 
 import { AppCoreContext, BreakPoint } from '../app';
+import { WithContextProps, withContext } from '../libs';
 
 export interface BreakpointDetectorProps {
     readonly resolver?: (windowWidth: number) => BreakPoint;

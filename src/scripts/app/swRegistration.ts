@@ -13,7 +13,7 @@ export const swRegistration = (props: ServiceWorkerRegistrationProps) => {
     
     const {
         onUpdateFound,
-        workerUrl = '/static/service-worker.js',
+        workerUrl = '/service-worker.js',
         workerOptions = { scope: '/' }
     } = props;
 

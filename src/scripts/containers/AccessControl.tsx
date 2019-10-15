@@ -1,6 +1,5 @@
-import { withContext, WithContextProps } from 'react-context-service';
-
 import { AppCoreContext, Policy } from '../app';
+import { WithContextProps, withContext } from '../libs';
 
 interface AccessControlProps {
     readonly funcKey?: string;

@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -16,35 +17,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __importStar(require("react"));
+var react_router_dom_1 = require("react-router-dom");
+var containers_1 = require("../../containers");
+exports.makeRoute = function (Component) {
+    if (!Component.routeInfo) {
+        throw Error('Default Props with routeProps needed in Route Component!');
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "react", "react-router-dom", "../../containers"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var React = __importStar(require("react"));
-    var react_router_dom_1 = require("react-router-dom");
-    var containers_1 = require("../../containers");
-    exports.makeRoute = function (Component) {
-        if (!Component.routeInfo) {
-            throw Error('Default Props with routeProps needed in Route Component!');
-        }
-        var routeInfo = Component.routeInfo;
-        var routeProps = {
-            key: routeInfo.path,
-            path: routeInfo.path,
-            exact: routeInfo.exact
-        };
-        if (routeInfo.policies) {
-            return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps), function (componentProps) {
-                return (React.createElement(containers_1.AccessControl, { policy: routeInfo.policies, renderDeny: function () { return React.createElement(react_router_dom_1.Redirect, { to: "/deny" }); } }, function () { return React.createElement(Component, __assign({}, componentProps)); }));
-            }));
-        }
-        return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps, { component: Component })));
+    var routeInfo = Component.routeInfo;
+    var routeProps = {
+        key: routeInfo.path,
+        path: routeInfo.path,
+        exact: routeInfo.exact
     };
-});
+    if (routeInfo.policies) {
+        return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps), function (componentProps) {
+            return (React.createElement(containers_1.AccessControl, { policy: routeInfo.policies, renderDeny: function () { return React.createElement(react_router_dom_1.Redirect, { to: "/deny" }); } }, function () { return React.createElement(Component, __assign({}, componentProps)); }));
+        }));
+    }
+    return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps, { component: Component })));
+};

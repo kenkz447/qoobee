@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -40,28 +41,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __importStar(require("react"));
+var InjectedWrapper = /** @class */ (function (_super) {
+    __extends(InjectedWrapper, _super);
+    function InjectedWrapper() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "react"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var React = __importStar(require("react"));
-    var InjectedWrapper = /** @class */ (function (_super) {
-        __extends(InjectedWrapper, _super);
-        function InjectedWrapper() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        InjectedWrapper.prototype.render = function () {
-            var _a = this.props, Component = _a.Component, props = __rest(_a, ["Component"]);
-            return (React.createElement(Component, __assign({}, props)));
-        };
-        return InjectedWrapper;
-    }(React.PureComponent));
-    exports.InjectedWrapper = InjectedWrapper;
-});
+    InjectedWrapper.prototype.render = function () {
+        var _a = this.props, Component = _a.Component, props = __rest(_a, ["Component"]);
+        return (React.createElement(Component, __assign({}, props)));
+    };
+    return InjectedWrapper;
+}(React.PureComponent));
+exports.InjectedWrapper = InjectedWrapper;

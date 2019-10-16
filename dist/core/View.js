@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -18,46 +19,35 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "react", "./Root"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var React = __importStar(require("react"));
-    var Root_1 = require("./Root");
-    var View = /** @class */ (function (_super) {
-        __extends(View, _super);
-        function View(props) {
-            var _this = _super.call(this, props) || this;
-            _this.setDocumentTitle = function () {
-                document.title = _this.title;
-            };
-            _this.setDocumentTitle();
-            return _this;
-        }
-        Object.defineProperty(View.prototype, "title", {
-            get: function () {
-                var InheritPage = Object.getPrototypeOf(this).constructor;
-                if (!InheritPage.hasOwnProperty('routeInfo')) {
-                    return 'Untitle page';
-                }
-                var routeInfo = InheritPage.routeInfo;
-                return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        View.prototype.componentDidUpdate = function () {
-            this.setDocumentTitle();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __importStar(require("react"));
+var Root_1 = require("./Root");
+var View = /** @class */ (function (_super) {
+    __extends(View, _super);
+    function View(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setDocumentTitle = function () {
+            document.title = _this.title;
         };
-        View.contextType = Root_1.Root.contextType;
-        return View;
-    }(React.PureComponent));
-    exports.View = View;
-});
+        _this.setDocumentTitle();
+        return _this;
+    }
+    Object.defineProperty(View.prototype, "title", {
+        get: function () {
+            var InheritPage = Object.getPrototypeOf(this).constructor;
+            if (!InheritPage.hasOwnProperty('routeInfo')) {
+                return 'Untitle page';
+            }
+            var routeInfo = InheritPage.routeInfo;
+            return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    View.prototype.componentDidUpdate = function () {
+        this.setDocumentTitle();
+    };
+    View.contextType = Root_1.Root.contextType;
+    return View;
+}(React.PureComponent));
+exports.View = View;

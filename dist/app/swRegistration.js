@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,43 +35,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.swRegistration = function (props) {
+    var serviceWorkerEnabled = 'serviceWorker' in navigator;
+    if (!serviceWorkerEnabled) {
+        return;
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.swRegistration = function (props) {
-        var serviceWorkerEnabled = 'serviceWorker' in navigator;
-        if (!serviceWorkerEnabled) {
-            return;
-        }
-        var onUpdateFound = props.onUpdateFound, _a = props.workerUrl, workerUrl = _a === void 0 ? '/service-worker.js' : _a, _b = props.workerOptions, workerOptions = _b === void 0 ? { scope: '/' } : _b;
-        var loadServiceWorker = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var registration, registrationError_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, navigator.serviceWorker.register(workerUrl, workerOptions)];
-                    case 1:
-                        registration = _a.sent();
-                        console.info('SW registered: ', registration);
-                        registration.onupdatefound = onUpdateFound;
-                        return [3 /*break*/, 3];
-                    case 2:
-                        registrationError_1 = _a.sent();
-                        console.info('SW registration failed: ', registrationError_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); };
-        window.addEventListener('load', loadServiceWorker);
-    };
-});
+    var onUpdateFound = props.onUpdateFound, _a = props.workerUrl, workerUrl = _a === void 0 ? '/service-worker.js' : _a, _b = props.workerOptions, workerOptions = _b === void 0 ? { scope: '/' } : _b;
+    var loadServiceWorker = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var registration, registrationError_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, navigator.serviceWorker.register(workerUrl, workerOptions)];
+                case 1:
+                    registration = _a.sent();
+                    console.info('SW registered: ', registration);
+                    registration.onupdatefound = onUpdateFound;
+                    return [3 /*break*/, 3];
+                case 2:
+                    registrationError_1 = _a.sent();
+                    console.info('SW registration failed: ', registrationError_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); };
+    window.addEventListener('load', loadServiceWorker);
+};

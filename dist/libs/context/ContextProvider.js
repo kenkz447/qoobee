@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -29,68 +30,57 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "react", "./ContextFactory"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var React = __importStar(require("react"));
-    var ContextFactory_1 = require("./ContextFactory");
-    var ContextProvider = /** @class */ (function (_super) {
-        __extends(ContextProvider, _super);
-        function ContextProvider(props) {
-            var _this = _super.call(this, props) || this;
-            _this.setContextProxy = function (source, newContext) {
-                var loggingEnabled = _this.props.loggingEnabled;
-                var newContextKey = Object.keys(newContext);
-                var oldContext = _this.getContext(newContextKey);
-                var setContextCallback = (function () {
-                    if (loggingEnabled) {
-                        _this.log(source, newContext, oldContext);
-                    }
-                });
-                _this.setState(newContext, setContextCallback);
-            };
-            _this.getContext = function () {
-                var contextKeys = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    contextKeys[_i] = arguments[_i];
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __importStar(require("react"));
+var ContextFactory_1 = require("./ContextFactory");
+var ContextProvider = /** @class */ (function (_super) {
+    __extends(ContextProvider, _super);
+    function ContextProvider(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setContextProxy = function (source, newContext) {
+            var loggingEnabled = _this.props.loggingEnabled;
+            var newContextKey = Object.keys(newContext);
+            var oldContext = _this.getContext(newContextKey);
+            var setContextCallback = (function () {
+                if (loggingEnabled) {
+                    _this.log(source, newContext, oldContext);
                 }
-                if (!contextKeys || !contextKeys.length) {
-                    return Object.seal(_this.state);
-                }
-                return contextKeys.reduce(function (gettedContext, currentKey) {
-                    gettedContext[currentKey] = _this.state[currentKey];
-                    return gettedContext;
-                }, {});
-            };
-            _this.log = function (source, newContext, oldContext) {
-                console.group('Context was changed');
-                console.log('By: ', source);
-                console.log('From:', oldContext);
-                console.log('To:', newContext);
-                console.groupEnd();
-            };
-            _this.listenContext = function (callback) {
-            };
-            var initContextValue = props.initContextValue;
-            var _a = _this, setContextProxy = _a.setContextProxy, getContext = _a.getContext;
-            _this.state = __assign(__assign({}, initContextValue), { setContext: function (context) {
-                    setContextProxy(this, context);
-                }, getContext: getContext, listenContext: _this.listenContext });
-            return _this;
-        }
-        ContextProvider.prototype.render = function () {
-            var Context = ContextFactory_1.ContextFactory.instance.Context;
-            return (React.createElement(Context.Provider, { value: this.state }, this.props.children));
+            });
+            _this.setState(newContext, setContextCallback);
         };
-        return ContextProvider;
-    }(React.Component));
-    exports.ContextProvider = ContextProvider;
-});
+        _this.getContext = function () {
+            var contextKeys = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                contextKeys[_i] = arguments[_i];
+            }
+            if (!contextKeys || !contextKeys.length) {
+                return Object.seal(_this.state);
+            }
+            return contextKeys.reduce(function (gettedContext, currentKey) {
+                gettedContext[currentKey] = _this.state[currentKey];
+                return gettedContext;
+            }, {});
+        };
+        _this.log = function (source, newContext, oldContext) {
+            console.group('Context was changed');
+            console.log('By: ', source);
+            console.log('From:', oldContext);
+            console.log('To:', newContext);
+            console.groupEnd();
+        };
+        _this.listenContext = function (callback) {
+        };
+        var initContextValue = props.initContextValue;
+        var _a = _this, setContextProxy = _a.setContextProxy, getContext = _a.getContext;
+        _this.state = __assign(__assign({}, initContextValue), { setContext: function (context) {
+                setContextProxy(this, context);
+            }, getContext: getContext, listenContext: _this.listenContext });
+        return _this;
+    }
+    ContextProvider.prototype.render = function () {
+        var Context = ContextFactory_1.ContextFactory.instance.Context;
+        return (React.createElement(Context.Provider, { value: this.state }, this.props.children));
+    };
+    return ContextProvider;
+}(React.Component));
+exports.ContextProvider = ContextProvider;

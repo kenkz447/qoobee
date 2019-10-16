@@ -1,4 +1,4 @@
-import { AppCoreContext, Policy } from '../app';
+import { AppCoreContext, Policy } from '../Types';
 import { WithContextProps, withContext } from '../libs';
 
 interface AccessControlProps {

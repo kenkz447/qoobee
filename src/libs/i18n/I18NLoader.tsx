@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { AppCoreContext } from '../../app';
+import { AppCoreContext } from '../../Types';
 import { WithContextProps, withContext } from '../context';
 
 interface I18NState {

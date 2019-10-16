@@ -17,7 +17,6 @@ export interface AppCoreContext<U = {}> {
     readonly currentUser: U;
     readonly currentUserRole: Role | null;
     readonly history: History;
-    readonly appState?: 'LOADING' | 'READY';
     readonly policies?: { readonly [key: string]: Policy };
     readonly currentBreakpoint: BreakPoint;
     readonly currentLanguage: string;

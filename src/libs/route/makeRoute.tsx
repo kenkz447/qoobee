@@ -3,7 +3,7 @@ import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
 
 import { RouteProps } from 'react-router';
 import { AccessControl } from '../../containers';
-import { RouteInfo } from '../../app';
+import { RouteInfo } from '../../Types';
 
 type ViewStruct = {
     readonly routeInfo: RouteInfo;

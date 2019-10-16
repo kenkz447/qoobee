@@ -3,9 +3,10 @@ import {
     History,
     LocationDescriptorObject
 } from 'history';
-import { AppCoreContext, events, ON_HISTORY_PUSH, ON_HISTORY_REPLACE } from '../app';
+import { events, ON_HISTORY_PUSH, ON_HISTORY_REPLACE } from '../app';
 import * as React from 'react';
 import { WithContextProps, withContext } from '../libs';
+import { AppCoreContext } from '../Types';
 
 interface HistoryMiddlewareOwnProps {
     readonly children: React.ReactNode;

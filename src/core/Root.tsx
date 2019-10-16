@@ -1,13 +1,14 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import {
-    AppCoreContext,
     ServiceWorkerRegistrationProps,
-    swRegistration,
-    RootContext
+    swRegistration
 } from '../app';
-import HistoryMiddleware from './HistoryMiddleware';
+
+import { HistoryMiddleware } from '../containers';
 import { ContextFactory } from '../libs';
+import { AppCoreContext } from '../Types';
 
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
     readonly renderApp: () => React.ReactNode;
@@ -16,6 +17,13 @@ export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
 }
 
 export class Root extends React.Component<RootProps> {
+
+    public static readonly contextType = React.createContext({});
+
+    public static readonly render = (rootElement: HTMLElement, rootProps: RootProps) => {
+        ReactDOM.render(<Root {...rootProps} />, rootElement);
+    }
+
     public componentDidMount() {
         const { SWRegistrationProps } = this.props;
         if (!SWRegistrationProps) {
@@ -30,7 +38,7 @@ export class Root extends React.Component<RootProps> {
 
         return (
             <ContextFactory
-                context={RootContext}
+                context={Root.contextType}
                 initContextValue={initialContext}
             >
                 <HistoryMiddleware>

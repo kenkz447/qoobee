@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { RouteInfo, RootContext } from '../app';
+import { RouteInfo } from '../Types';
+import { Root } from './Root';
 
 export class View<P extends RouteComponentProps, S = {}> extends React.PureComponent<P, S> {
 
-    public static readonly contextType = RootContext;
+    public static readonly contextType = Root.contextType;
 
-    get title() {
+    public  get title() {
         const InheritPage = Object.getPrototypeOf(this).constructor;
         if (!InheritPage.hasOwnProperty('routeInfo')) {
             return 'Untitle page';
@@ -16,12 +17,12 @@ export class View<P extends RouteComponentProps, S = {}> extends React.PureCompo
         return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
     }
 
-    constructor(props: P) {
+    public constructor(props: P) {
         super(props);
         this.setDocumentTitle();
     }
 
-    readonly setDocumentTitle = () => {
+    public readonly setDocumentTitle = () => {
         document.title = this.title;
     }
 

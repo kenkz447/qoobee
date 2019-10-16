@@ -4,7 +4,7 @@ import { ContextProvider } from './ContextProvider';
 
 export type ContextFactoryProps<T = {}> = {
     initContextValue: T;
-    context?: React.Context<T>
+    context: React.Context<T>
     loggingEnabled?: boolean;
 };
 
@@ -15,8 +15,8 @@ export class ContextFactory extends React.Component<ContextFactoryProps> {
 
     constructor(props: ContextFactoryProps) {
         super(props);
-        const { context, initContextValue } = this.props;
-        this.Context = context || React.createContext(initContextValue);
+        const { context } = this.props;
+        this.Context = context;
         ContextFactory.instance = this;
     }
 

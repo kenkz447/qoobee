@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { AppCoreContext, BreakPoint } from '../app';
+import { AppCoreContext, BreakPoint } from '../Types';
 import { WithContextProps, withContext } from '../libs';
 
 export interface BreakpointDetectorProps {

@@ -8,6 +8,7 @@ interface IDelayRenderState {
   readonly canRender: boolean;
 }
 
+
 export class DelayRender extends React.PureComponent<IDelayRenderProps, IDelayRenderState> {
   public readonly state = {
     canRender: false,

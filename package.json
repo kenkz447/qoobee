@@ -1,6 +1,6 @@
 {
     "name": "qoobee",
-    "version": "1.0.0-alpha-2.1",
+    "version": "1.0.0-alpha-2.2",
     "description": "Qoobee!!!",
     "main": "dist/index.js",
     "repository": "github:kenkz447/qoobee",
@@ -9,6 +9,9 @@
         "build": "npm run build:before && tsc",
         "test": "jest --coverage --config ./jest.config.json"
     },
+    "files": [
+        "dist"
+    ],
     "keywords": [
         "react",
         "typescript",

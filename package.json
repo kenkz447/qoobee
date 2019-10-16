@@ -7,7 +7,8 @@
     "scripts": {
         "build:before": "rimraf ./dist",
         "build": "npm run build:before && tsc",
-        "test": "jest --coverage --config ./jest.config.json"
+        "test": "jest --coverage --config ./jest.config.json",
+        "changelog": "auto-changelog -p"
     },
     "files": [
         "dist"
@@ -28,6 +29,7 @@
         "@types/react-dom": "^16.9.2",
         "@types/react-router": "^5.1.2",
         "@types/react-test-renderer": "^16.9.1",
+        "auto-changelog": "^1.16.1",
         "coveralls": "^3.0.7",
         "jest": "^24.9.0",
         "react-test-renderer": "^16.10.2",

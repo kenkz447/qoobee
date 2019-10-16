@@ -2,7 +2,7 @@
     "name": "qoobee",
     "version": "1.0.0-alpha-2.0",
     "description": "Qoobee!!!",
-    "main": "dist/amd.build.js",
+    "main": "dist/index.js",
     "repository": "github:kenkz447/qoobee",
     "scripts": {
         "build:before": "rimraf ./dist",

@@ -2,7 +2,7 @@
     "name": "qoobee",
     "version": "1.0.0-alpha-1.1",
     "description": "Qoobee!!!",
-    "main": "dist/index.js",
+    "main": "dist/amd.build.js",
     "repository": "github:kenkz447/qoobee",
     "scripts": {
         "build:before": "rimraf ./dist",
@@ -22,6 +22,7 @@
         "@types/jest": "^24.0.19",
         "@types/node": "^12.7.12",
         "@types/react": "^16.9.6",
+        "@types/react-dom": "^16.9.2",
         "@types/react-router": "^5.1.2",
         "@types/react-test-renderer": "^16.9.1",
         "coveralls": "^3.0.7",

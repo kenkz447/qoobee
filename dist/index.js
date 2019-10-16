@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./app", "./core", "./libs"], factory);
+        define(["require", "exports", "./app", "./core", "./libs", "./containers"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -15,4 +15,5 @@
     __export(require("./app"));
     __export(require("./core"));
     __export(require("./libs"));
+    __export(require("./containers"));
 });

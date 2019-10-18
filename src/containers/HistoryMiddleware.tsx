@@ -53,7 +53,7 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
                     return;
                 }
 
-                const { currentUserRole } = $self.props;
+                const { currentRole: currentUserRole } = $self.props;
                 const hasRedirects = (currentUserRole && currentUserRole.redirects);
 
                 const redirectTarget = hasRedirects &&
@@ -94,5 +94,5 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
 
 export default withContext<AppCoreContext, HistoryMiddlewareOwnProps>(
     'history',
-    'currentUserRole'
+    'currentRole'
 )(HistoryMiddleware);

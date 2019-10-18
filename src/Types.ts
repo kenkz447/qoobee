@@ -1,5 +1,4 @@
 import { History } from 'history';
-import { RouteProps } from 'react-router';
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -14,21 +13,23 @@ export interface MenuItem {
 }
 
 export interface AppCoreContext<U = {}> {
-    readonly currentUser: U;
-    readonly currentUserRole: Role | null;
+    readonly currentUser: U | null;
+    readonly currentRole: Role | null;
     readonly history: History;
-    readonly policies?: { readonly [key: string]: Policy };
+    readonly policies: { readonly [key: string]: Policy };
     readonly currentBreakpoint: BreakPoint;
     readonly currentLanguage: string;
-    readonly menus?: { readonly [key: string]: MenuItem[] };
+    readonly menus: { readonly [key: string]: MenuItem[] };
+    readonly paths: { readonly [key: string]: string };
 }
 
-export interface RouteInfo<P = {}, S = {}> extends RouteProps {
+export interface RouteInfo<P = {}, S = {}> {
     readonly path: string;
     readonly title: string | ((props: P, state: S) => string);
     readonly icon?: JSX.Element;
     readonly policies?: string[] | Policy[];
     readonly isActive?: () => boolean;
+    readonly exact?: boolean;
 }
 
 export interface Menu<P = {}> {

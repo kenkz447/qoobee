@@ -1,17 +1,5 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+// tslint:disable
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -59,50 +47,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __importStar(require("react"));
-var ReactDOM = __importStar(require("react-dom"));
-var app_1 = require("../app");
-var containers_1 = require("../containers");
-var libs_1 = require("../libs");
-var Root = /** @class */ (function (_super) {
-    __extends(Root, _super);
-    function Root() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Root.prototype.componentDidMount = function () {
-        var SWRegistrationProps = this.props.SWRegistrationProps;
-        if (!SWRegistrationProps) {
-            return;
-        }
-        app_1.swRegistration(SWRegistrationProps);
-    };
-    Root.prototype.render = function () {
-        var _a = this.props, renderApp = _a.renderApp, initialContext = _a.initialContext;
-        return (React.createElement(libs_1.ContextFactory, { context: Root.contextType, initContextValue: initialContext },
-            React.createElement(containers_1.HistoryMiddleware, null, renderApp(initialContext))));
-    };
-    Root.contextType = React.createContext({});
-    Root.render = function (rootElement, rootProps) { return __awaiter(void 0, void 0, void 0, function () {
-        var bootstrappedContext, appElement;
+var runMiddlewares_1 = require("../runMiddlewares");
+var libs_1 = require("../../libs");
+describe('runMiddlewares', function () {
+    var fooValue = { foo: true };
+    var barValue = { bar: true };
+    var fooMiddleware = function (initContext, next) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, app_1.runMiddlewares(rootProps.initialContext, rootProps.bootstrappers)];
+                case 0: return [4 /*yield*/, libs_1.wait(1000)];
                 case 1:
-                    bootstrappedContext = _a.sent();
-                    appElement = React.createElement(Root, __assign({}, rootProps, { initialContext: bootstrappedContext }));
-                    ReactDOM.render(appElement, rootElement);
-                    return [2 /*return*/, appElement];
+                    _a.sent();
+                    next(__assign(__assign({}, initContext), fooValue));
+                    return [2 /*return*/];
             }
         });
     }); };
-    return Root;
-}(React.Component));
-exports.Root = Root;
+    var barMiddleware = function (initContext, next) {
+        next(__assign(__assign({}, initContext), barValue));
+    };
+    var middlewares = [fooMiddleware, barMiddleware];
+    it('should merge objects', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var initContext, final;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    initContext = {
+                        init: true
+                    };
+                    return [4 /*yield*/, runMiddlewares_1.runMiddlewares(initContext, middlewares)];
+                case 1:
+                    final = _a.sent();
+                    expect(final)
+                        .toEqual(__assign(__assign(__assign({}, initContext), fooValue), barValue));
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

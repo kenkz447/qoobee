@@ -43,7 +43,7 @@ var HistoryMiddleware = /** @class */ (function (_super) {
                     if (nextUrl === currentUrl) {
                         return;
                     }
-                    var currentUserRole = $self.props.currentUserRole;
+                    var currentUserRole = $self.props.currentRole;
                     var hasRedirects = (currentUserRole && currentUserRole.redirects);
                     var redirectTarget = hasRedirects &&
                         currentUserRole.redirects.find(function (r) { return r.test.test(nextUrl); });
@@ -88,4 +88,4 @@ var HistoryMiddleware = /** @class */ (function (_super) {
     };
     return HistoryMiddleware;
 }(React.PureComponent));
-exports.default = libs_1.withContext('history', 'currentUserRole')(HistoryMiddleware);
+exports.default = libs_1.withContext('history', 'currentRole')(HistoryMiddleware);

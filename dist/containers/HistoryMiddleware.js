@@ -49,11 +49,9 @@ var HistoryMiddleware = /** @class */ (function (_super) {
                         currentRole.redirects.find(function (r) { return r.test.test(nextUrl); });
                     if (redirectTarget) {
                         var args = [redirectTarget.target];
-                        app_1.events.emit(app_1.ON_HISTORY_PUSH, args);
                         originPush.apply(window, args);
                         return;
                     }
-                    app_1.events.emit(app_1.ON_HISTORY_PUSH, arguments);
                     originPush.apply(window, arguments);
                 },
                 replace: nextReplace

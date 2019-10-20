@@ -5,5 +5,6 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./events"));
 __export(require("./getDefaultInitContext"));
+__export(require("./history"));
 __export(require("./runMiddlewares"));
 __export(require("./swRegistration"));

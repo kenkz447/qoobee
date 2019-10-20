@@ -22,32 +22,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var Root_1 = require("./Root");
-var View = /** @class */ (function (_super) {
-    __extends(View, _super);
-    function View(props) {
+var libs_1 = require("../libs");
+var Page = /** @class */ (function (_super) {
+    __extends(Page, _super);
+    function Page(props) {
         var _this = _super.call(this, props) || this;
+        _this.urlQuery = new libs_1.ReactUrlQuery(_this);
         _this.setDocumentTitle = function () {
             document.title = _this.title;
         };
         _this.setDocumentTitle();
         return _this;
     }
-    Object.defineProperty(View.prototype, "title", {
+    Object.defineProperty(Page.prototype, "title", {
         get: function () {
-            var InheritPage = Object.getPrototypeOf(this).constructor;
-            if (!InheritPage.hasOwnProperty('routeInfo')) {
+            var InheritedPage = Object.getPrototypeOf(this).constructor;
+            if (!InheritedPage.hasOwnProperty('routeInfo')) {
                 return 'Untitle page';
             }
-            var routeInfo = InheritPage.routeInfo;
-            return typeof routeInfo.title === 'string' ? routeInfo.title : routeInfo.title(this.props, this.state);
+            var routeInfo = InheritedPage.routeInfo;
+            var title = typeof routeInfo.title === 'string'
+                ? routeInfo.title
+                : routeInfo.title(this.props, this.state);
+            return title;
         },
         enumerable: true,
         configurable: true
     });
-    View.prototype.componentDidUpdate = function () {
+    Page.prototype.componentDidUpdate = function () {
         this.setDocumentTitle();
     };
-    View.contextType = Root_1.Root.contextType;
-    return View;
+    Page.contextType = Root_1.Root.contextType;
+    return Page;
 }(React.PureComponent));
-exports.View = View;
+exports.Page = Page;

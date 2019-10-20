@@ -1,6 +1,6 @@
 {
     "name": "qoobee",
-    "version": "1.0.0-alpha-2.5",
+    "version": "1.0.0-alpha-3.0",
     "description": "Qoobee!!!",
     "main": "dist/index.js",
     "repository": "github:kenkz447/qoobee",
@@ -24,11 +24,13 @@
     "devDependencies": {
         "@types/history": "^4.7.3",
         "@types/jest": "^24.0.19",
+        "@types/lodash": "^4.14.144",
         "@types/node": "^12.7.12",
         "@types/react": "^16.9.6",
         "@types/react-dom": "^16.9.2",
         "@types/react-router": "^5.1.2",
         "@types/react-test-renderer": "^16.9.1",
+        "@types/urijs": "^1.19.4",
         "auto-changelog": "^1.16.1",
         "coveralls": "^3.0.7",
         "jest": "^24.9.0",
@@ -45,6 +47,7 @@
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
         "react-router": "^5.1.2",
-        "react-router-dom": "^5.1.2"
+        "react-router-dom": "^5.1.2",
+        "urijs": "^1.19.1"
     }
 }

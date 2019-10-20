@@ -43,10 +43,10 @@ var HistoryMiddleware = /** @class */ (function (_super) {
                     if (nextUrl === currentUrl) {
                         return;
                     }
-                    var currentUserRole = $self.props.currentRole;
-                    var hasRedirects = (currentUserRole && currentUserRole.redirects);
+                    var currentRole = $self.props.currentRole;
+                    var hasRedirects = (currentRole && currentRole.redirects);
                     var redirectTarget = hasRedirects &&
-                        currentUserRole.redirects.find(function (r) { return r.test.test(nextUrl); });
+                        currentRole.redirects.find(function (r) { return r.test.test(nextUrl); });
                     if (redirectTarget) {
                         var args = [redirectTarget.target];
                         app_1.events.emit(app_1.ON_HISTORY_PUSH, args);

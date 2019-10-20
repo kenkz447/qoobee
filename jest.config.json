@@ -1,18 +1,4 @@
 {
-    "moduleFileExtensions": [
-        "ts",
-        "tsx",
-        "js"
-    ],
-    "transform": {
-        "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "globals": {
-        "ts-jest": {
-            "tsConfigFile": "tsconfig.json"
-        }
-    },
-    "testMatch": [
-        "**/**.test.+(ts|tsx|js)"
-    ]
+    "preset": "ts-jest",
+    "setupFiles": ["./__mocks__/client.js"]
 }

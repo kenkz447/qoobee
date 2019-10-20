@@ -53,20 +53,18 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
                     return;
                 }
 
-                const { currentRole: currentUserRole } = $self.props;
-                const hasRedirects = (currentUserRole && currentUserRole.redirects);
+                const { currentRole } = $self.props;
+                const hasRedirects = (currentRole && currentRole.redirects);
 
                 const redirectTarget = hasRedirects &&
-                    currentUserRole!.redirects!.find(r => r.test.test(nextUrl));
+                    currentRole!.redirects!.find(r => r.test.test(nextUrl));
 
                 if (redirectTarget) {
                     const args = [redirectTarget.target];
-                    events.emit(ON_HISTORY_PUSH, args);
                     originPush.apply(window, args);
                     return;
                 }
 
-                events.emit(ON_HISTORY_PUSH, arguments);
                 originPush.apply(window, arguments);
             },
             replace: nextReplace

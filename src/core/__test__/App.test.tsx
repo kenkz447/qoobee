@@ -5,7 +5,7 @@ const initAppContext = getDefaultInitContext();
 
 describe('containers/App', () => {
     const appRoot = document.createElement('div');
-    const renderFn = jest.fn(() => null);
+    const renderApp = jest.fn(() => null);
 
     it('should render correctly', async () => {
         await Root.render(
@@ -13,11 +13,11 @@ describe('containers/App', () => {
             {
                 initialContext: initAppContext,
                 bootstrappers: [],
-                renderApp: renderFn
+                renderApp: renderApp
             }
         );
 
-        expect(renderFn).toBeCalledWith(
+        expect(renderApp).toBeCalledWith(
             initAppContext
         );
     });

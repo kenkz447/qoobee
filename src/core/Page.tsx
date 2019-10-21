@@ -3,14 +3,14 @@ import { RouteComponentProps } from 'react-router';
 
 import { RouteInfo } from '../Types';
 
-import { Root } from './Root';
+import { rootContextType } from '../app';
 import { ReactUrlQuery } from '../libs';
 
 export class Page<P extends RouteComponentProps, S = {}> extends React.PureComponent<P, S> {
 
     public static readonly routeInfo: RouteInfo;
     
-    public static readonly contextType = Root.contextType;
+    public static readonly contextType = rootContextType;
 
     public readonly urlQuery = new ReactUrlQuery(this);
 

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { WithContextProps, ListenContextCallback } from './Types';
 
-interface ContextProviderProps<T> {
-    initContextValue: T;
-    contextType: React.Context<T>;
+interface ContextProviderProps<C> {
+    initContextValue: C;
+    contextType: React.Context<C>;
+    children: React.ReactNode | React.ComponentType<WithContextProps<C>>;
 }
 
-type ContextProviderState<C> = C & Required<WithContextProps>;
+type ContextProviderState<C> = Required<WithContextProps<C>>;
 
 export class ContextProvider<C> extends React.Component<ContextProviderProps<C>, ContextProviderState<C>> {
     private readonly setContextProxy = (source, newContext) => {
@@ -50,11 +51,15 @@ export class ContextProvider<C> extends React.Component<ContextProviderProps<C>,
     }
 
     public render() {
-        const { contextType } = this.props;
+        const { contextType, children } = this.props;
 
         return (
             <contextType.Provider value={this.state}>
-                {this.props.children}
+                {
+                    typeof children === 'function'
+                        ? React.createElement(children as React.ComponentType<C>, this.state)
+                        : children
+                }
             </contextType.Provider>
         );
     }

@@ -1,31 +1,29 @@
 import * as React from 'react';
 
 import { ContextProvider } from './ContextProvider';
+import { WithContextProps } from './Types';
 
 export type ContextFactoryProps<T> = {
-    initContextValue: T;
+    initContextValue?: T;
     contextType: React.Context<T>;
+    children?: React.ReactNode | React.Component<WithContextProps<T>>;
 };
 
-export class ContextFactory<C = {}> extends React.Component<ContextFactoryProps<C>> {
-    constructor(props: ContextFactoryProps<C>) {
-        super(props);
-    }
+export function ContextFactory<C = {}>(props: ContextFactoryProps<C>) {
+    const {
+        children,
+        contextType,
+        initContextValue
+    } = props;
 
-    render() {
-        const {
-            children,
-            contextType,
-            initContextValue
-        } = this.props;
+    const defaultContextValue = React.useContext(contextType);
 
-        return (
-            <ContextProvider
-                contextType={contextType}
-                initContextValue={initContextValue}
-            >
-                {children}
-            </ContextProvider>
-        );
-    }
+    return (
+        <ContextProvider
+            contextType={contextType}
+            initContextValue={initContextValue || defaultContextValue}
+        >
+            {children}
+        </ContextProvider>
+    );
 }

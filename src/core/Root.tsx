@@ -10,25 +10,29 @@ import {
 } from '../app';
 
 import { ContextFactory } from '../libs';
-import { AppCoreContext } from '../Types';
+import { AppCoreContext, SideContext } from '../Types';
 
 import { HistoryMiddleware } from './HistoryMiddleware';
 
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
     readonly renderApp: (appContext: Context) => React.ReactNode;
     readonly initialContext: Context;
-    readonly bootstrappers: Middleware<Context>[];
+    readonly bootstrappers?: Middleware<Context>[];
+    readonly sideContexts?: SideContext[];
     readonly SWRegistrationProps?: ServiceWorkerRegistrationProps;
 }
 
 export class Root extends React.Component<RootProps> {
 
-    public static readonly contextType = rootContextType;
+    public static defaultProps = {
+        sideContexts: [],
+        bootstrappers: []
+    };
 
     public static readonly render = async (rootElement: HTMLElement, rootProps: RootProps) => {
         const bootstrappedContext = await runMiddlewares(
             rootProps.initialContext,
-            rootProps.bootstrappers
+            rootProps.bootstrappers!
         );
 
         const appElement = <Root {...rootProps} initialContext={bootstrappedContext} />;
@@ -47,17 +51,34 @@ export class Root extends React.Component<RootProps> {
     }
 
     public render() {
-        const { renderApp, initialContext } = this.props;
+        const { renderApp, initialContext, sideContexts } = this.props;
 
-        return (
-            <ContextFactory
-                contextType={Root.contextType}
-                initContextValue={initialContext}
-            >
-                <HistoryMiddleware>
-                    {renderApp(initialContext)}
-                </HistoryMiddleware>
-            </ContextFactory>
-        );
+        return [
+            (
+                <ContextFactory
+                    key={rootContextType.displayName}
+                    contextType={rootContextType}
+                    initContextValue={initialContext}
+                >
+                    <HistoryMiddleware>
+                        {renderApp(initialContext)}
+                    </HistoryMiddleware>
+                </ContextFactory>
+            ),
+            sideContexts!.map((sideContext) => {
+                const { contextType, mount, name } = sideContext;
+                
+                contextType.displayName = name;
+
+                return (
+                    <ContextFactory
+                        key={contextType.displayName}
+                        contextType={contextType}
+                    >
+                        {mount}
+                    </ContextFactory>
+                );
+            })
+        ];
     }
 }

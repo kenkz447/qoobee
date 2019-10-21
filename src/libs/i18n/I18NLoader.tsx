@@ -20,7 +20,7 @@ class I18NLoaderInjected extends React.PureComponent<
     I18NState
     > {
     static getDerivedStateFromProps(
-        nextProps: WithContextProps<AppCoreContext>,
+        nextProps: I18NLoaderInjectedProps,
         state: I18NState
     ): I18NState | null {
         if (nextProps.currentLanguage !== state.currentLanguage) {

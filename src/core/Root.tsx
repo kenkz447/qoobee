@@ -66,7 +66,7 @@ export class Root extends React.Component<RootProps> {
                 </ContextFactory>
             ),
             sideContexts!.map((sideContext) => {
-                const { contextType, mount, name } = sideContext;
+                const { contextType, mount, name, event } = sideContext;
                 
                 contextType.displayName = name;
 
@@ -74,6 +74,7 @@ export class Root extends React.Component<RootProps> {
                     <ContextFactory
                         key={contextType.displayName}
                         contextType={contextType}
+                        event={event}
                     >
                         {mount}
                     </ContextFactory>

@@ -2,18 +2,21 @@ import * as React from 'react';
 
 import { ContextProvider } from './ContextProvider';
 import { WithContextProps } from './Types';
+import { Event } from '../../app';
 
-export type ContextFactoryProps<T> = {
-    initContextValue?: T;
-    contextType: React.Context<T>;
-    children?: React.ReactNode | React.Component<WithContextProps<T>>;
-};
+export interface ContextFactoryProps<C> {
+    readonly initContextValue?: C;
+    readonly contextType: React.Context<C>;
+    readonly children?: React.ReactNode | React.Component<WithContextProps<C>>;
+    readonly event?: Event<C>;
+}
 
 export function ContextFactory<C = {}>(props: ContextFactoryProps<C>) {
     const {
         children,
         contextType,
-        initContextValue
+        initContextValue,
+        event
     } = props;
 
     const defaultContextValue = React.useContext(contextType);
@@ -22,6 +25,7 @@ export function ContextFactory<C = {}>(props: ContextFactoryProps<C>) {
         <ContextProvider
             contextType={contextType}
             initContextValue={initContextValue || defaultContextValue}
+            event={event}
         >
             {children}
         </ContextProvider>

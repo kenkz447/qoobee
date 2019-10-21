@@ -1,5 +1,6 @@
 import { History } from 'history';
 import { WithContextProps } from './libs';
+import { Event } from './app';
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -11,6 +12,7 @@ export interface SideContext<C = {}> {
     readonly name: string;
     readonly contextType: React.Context<C>;
     readonly mount: React.ComponentType<WithContextProps<C>>;
+    readonly event?: Event<C>;
 }
 
 export interface MenuItem {

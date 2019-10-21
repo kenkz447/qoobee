@@ -27,7 +27,7 @@ export function withContext<C = {}, CO extends C = C>(Context: React.Context<CO>
             return contextToProps;
         };
 
-        return class ContextInjector extends React.PureComponent<P> {
+        return class ContextInjector extends React.PureComponent<P, { s: string}> {
             public readonly renderConsumer = (contextValue: ContextValue) => {
                 const contextToProps = getContextToProps(contextValue);
 

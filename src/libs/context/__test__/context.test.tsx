@@ -6,6 +6,7 @@ import { withContext } from '../withContext';
 import { ContextFactory } from '../ContextFactory';
 import { ContextRender } from '../ContextRender';
 import { ContextProvider } from '../ContextProvider';
+import { createEvent } from '../../../app';
 
 interface AppContext {
     foo?: number;
@@ -179,6 +180,7 @@ describe('Lib Context', () => {
             expect(renderFoo).toBeCalledWith(changedTextComponentProps);
         });
     });
+
     describe('without initial context value to factory', () => {
         const sideContextValue = {
             foo: 1,
@@ -206,6 +208,45 @@ describe('Lib Context', () => {
 
         it('should renderer called', () => {
             expect(sideContextRender).toBeCalledWith(sideContextValue);
+        });
+    });
+
+    describe('with event', () => {
+        const sideContextValue: AppContext = {
+            foo: 1,
+            bar: 2
+        };
+
+        const sideContext = React.createContext(sideContextValue);
+        sideContext.displayName = 'sideContex';
+
+        const sideContextRender = jest.fn((...props) => null);
+        const event = createEvent<AppContext>('SOME_EVENT');
+
+        TestRenderer.create(
+            <ContextFactory
+                contextType={sideContext}
+                event={event}
+            >
+                <ContextRender contextType={sideContext}>
+                    {({ foo, bar }) => sideContextRender({ foo, bar })}
+                </ContextRender>
+            </ContextFactory>
+        );
+
+        afterEach(() => {
+            sideContextRender.mockClear();
+        });
+
+        it('should renderer called after emit', () => {
+            const eventPayload = {
+                bar: 10,
+                foo: 10
+            };
+
+            event.emit(eventPayload);
+            expect(sideContextRender).toBeCalledWith(eventPayload);
+            expect(sideContextRender).toBeCalledTimes(2);
         });
     });
 });

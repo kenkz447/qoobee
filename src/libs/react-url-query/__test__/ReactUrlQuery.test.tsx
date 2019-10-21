@@ -29,7 +29,7 @@ history.push = (path) => {
     originHistoryPush(path);
 };
 
-describe('pageBag', () => {
+describe('ReactUrlQuery', () => {
     const initSearchQuery = `?paramExist=true&paramExistWithDefault=true&getParamExist=true`;
     history.push(initSearchQuery);
 
@@ -86,7 +86,7 @@ describe('pageBag', () => {
         const nextQuery = `?paramNotExist=true`;
         history.push(nextQuery);
 
-        expect(homeRenderer).toBeCalledTimes(2);
+        expect(homeRenderer).toBeCalledTimes(1);
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
@@ -113,7 +113,7 @@ describe('pageBag', () => {
                 paramNotExist: 'helloSearch',
                 getParamExist: undefined
             } as HomePageState);
-        expect(homeRenderer).toBeCalledTimes(2);
+        expect(homeRenderer).toBeCalledTimes(1);
     });
 
     it('should not update url search when non sync state change', () => {

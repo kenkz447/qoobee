@@ -64,6 +64,21 @@ var ContextProvider = /** @class */ (function (_super) {
             }, getContext: getContext });
         return _this;
     }
+    ContextProvider.prototype.componentDidMount = function () {
+        var _this = this;
+        var event = this.props.event;
+        if (event) {
+            this._unlistenEvent = event.listen(function (payload) {
+                _this.setState(payload);
+            });
+        }
+    };
+    ContextProvider.prototype.componentWillUnmount = function () {
+        if (!this._unlistenEvent) {
+            return;
+        }
+        this._unlistenEvent();
+    };
     ContextProvider.prototype.render = function () {
         var _a = this.props, contextType = _a.contextType, children = _a.children;
         return (React.createElement(contextType.Provider, { value: this.state }, typeof children === 'function'

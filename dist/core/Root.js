@@ -90,9 +90,9 @@ var Root = /** @class */ (function (_super) {
             (React.createElement(libs_1.ContextFactory, { key: app_1.rootContextType.displayName, contextType: app_1.rootContextType, initContextValue: initialContext },
                 React.createElement(HistoryMiddleware_1.HistoryMiddleware, null, renderApp(initialContext)))),
             sideContexts.map(function (sideContext) {
-                var contextType = sideContext.contextType, mount = sideContext.mount, name = sideContext.name;
+                var contextType = sideContext.contextType, mount = sideContext.mount, name = sideContext.name, event = sideContext.event;
                 contextType.displayName = name;
-                return (React.createElement(libs_1.ContextFactory, { key: contextType.displayName, contextType: contextType }, mount));
+                return (React.createElement(libs_1.ContextFactory, { key: contextType.displayName, contextType: contextType, event: event }, mount));
             })
         ];
     };

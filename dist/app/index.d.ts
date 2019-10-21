@@ -1,3 +1,4 @@
+export * from './createEvent';
 export * from './events';
 export * from './getDefaultInitContext';
 export * from './history';

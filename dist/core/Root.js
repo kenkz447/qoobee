@@ -85,11 +85,21 @@ var Root = /** @class */ (function (_super) {
         app_1.swRegistration(SWRegistrationProps);
     };
     Root.prototype.render = function () {
-        var _a = this.props, renderApp = _a.renderApp, initialContext = _a.initialContext;
-        return (React.createElement(libs_1.ContextFactory, { contextType: Root.contextType, initContextValue: initialContext },
-            React.createElement(HistoryMiddleware_1.HistoryMiddleware, null, renderApp(initialContext))));
+        var _a = this.props, renderApp = _a.renderApp, initialContext = _a.initialContext, sideContexts = _a.sideContexts;
+        return [
+            (React.createElement(libs_1.ContextFactory, { key: app_1.rootContextType.displayName, contextType: app_1.rootContextType, initContextValue: initialContext },
+                React.createElement(HistoryMiddleware_1.HistoryMiddleware, null, renderApp(initialContext)))),
+            sideContexts.map(function (sideContext) {
+                var contextType = sideContext.contextType, mount = sideContext.mount, name = sideContext.name;
+                contextType.displayName = name;
+                return (React.createElement(libs_1.ContextFactory, { key: contextType.displayName, contextType: contextType }, mount));
+            })
+        ];
     };
-    Root.contextType = app_1.rootContextType;
+    Root.defaultProps = {
+        sideContexts: [],
+        bootstrappers: []
+    };
     Root.render = function (rootElement, rootProps) { return __awaiter(void 0, void 0, void 0, function () {
         var bootstrappedContext, appElement;
         return __generator(this, function (_a) {

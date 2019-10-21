@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -22,19 +9,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var ContextProvider_1 = require("./ContextProvider");
-var ContextFactory = /** @class */ (function (_super) {
-    __extends(ContextFactory, _super);
-    function ContextFactory(props) {
-        var _this = _super.call(this, props) || this;
-        var context = _this.props.contextType;
-        _this.Context = context;
-        return _this;
-    }
-    ContextFactory.prototype.render = function () {
-        var _this = this;
-        var _a = this.props, children = _a.children, context = _a.contextType, initContextValue = _a.initContextValue;
-        return (React.createElement(ContextProvider_1.ContextProvider, { ref: function (e) { return _this.provider = e; }, contextType: context, initContextValue: initContextValue }, children));
-    };
-    return ContextFactory;
-}(React.Component));
+function ContextFactory(props) {
+    var children = props.children, contextType = props.contextType, initContextValue = props.initContextValue;
+    var defaultContextValue = React.useContext(contextType);
+    return (React.createElement(ContextProvider_1.ContextProvider, { contextType: contextType, initContextValue: initContextValue || defaultContextValue }, children));
+}
 exports.ContextFactory = ContextFactory;

@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { WithContextProps } from '../libs';
 import { AppCoreContext } from '../Types';
-export declare const HistoryMiddlewareInjector: <P, CP extends React.ComponentType<P & AppCoreContext<{}> & {
-    setContext: import("../libs/context/Types").SetContext<AppCoreContext<{}>>;
-    getContext: import("../libs/context/Types").GetContext<AppCoreContext<{}>>;
-    listenContext: (callback: import("../libs/context/Types").ListenContextCallback) => void;
-}> = React.ComponentType<P & AppCoreContext<{}> & {
-    setContext: import("../libs/context/Types").SetContext<AppCoreContext<{}>>;
-    getContext: import("../libs/context/Types").GetContext<AppCoreContext<{}>>;
-    listenContext: (callback: import("../libs/context/Types").ListenContextCallback) => void;
+export declare const HistoryMiddlewareInjector: <P, CP extends React.ComponentType<P & {
+    setContext: import("../libs/context/Types").SetContext<{}>;
+    getContext: import("../libs/context/Types").GetContext<{}>;
+}> = React.ComponentType<P & {
+    setContext: import("../libs/context/Types").SetContext<{}>;
+    getContext: import("../libs/context/Types").GetContext<{}>;
 }>>(Component: CP) => {
     new (props: Readonly<P>): {
         readonly renderConsumer: (contextValue: WithContextProps<AppCoreContext<{}>, P>) => JSX.Element;

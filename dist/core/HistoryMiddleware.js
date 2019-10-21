@@ -21,8 +21,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var history_1 = require("history");
-var app_1 = require("../app");
 var React = __importStar(require("react"));
+var app_1 = require("../app");
 var libs_1 = require("../libs");
 var HistoryMiddlewareInjected = /** @class */ (function (_super) {
     __extends(HistoryMiddlewareInjected, _super);
@@ -32,7 +32,6 @@ var HistoryMiddlewareInjected = /** @class */ (function (_super) {
             var originPush = history.push;
             var originReplace = history.replace;
             var nextReplace = function () {
-                app_1.events.emit(app_1.ON_HISTORY_REPLACE, arguments);
                 originReplace.apply(window, arguments);
             };
             var $self = _this;

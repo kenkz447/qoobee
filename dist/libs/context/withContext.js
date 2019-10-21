@@ -53,21 +53,22 @@ function withContext(Context) {
     return function (Component) {
         var getContextToProps = function (contextValue) {
             var e_1, _a;
+            if (!keys.length) {
+                return contextValue;
+            }
             var contextToProps = {};
-            if (keys) {
+            try {
+                for (var keys_1 = __values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
+                    var contextKey = keys_1_1.value;
+                    contextToProps[contextKey] = contextValue[contextKey];
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
                 try {
-                    for (var keys_1 = __values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
-                        var contextKey = keys_1_1.value;
-                        contextToProps[contextKey] = contextValue[contextKey];
-                    }
+                    if (keys_1_1 && !keys_1_1.done && (_a = keys_1.return)) _a.call(keys_1);
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (keys_1_1 && !keys_1_1.done && (_a = keys_1.return)) _a.call(keys_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
+                finally { if (e_1) throw e_1.error; }
             }
             contextToProps.setContext = contextValue.setContext;
             contextToProps.getContext = contextValue.getContext;

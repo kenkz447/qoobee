@@ -57,19 +57,18 @@ var ContextProvider = /** @class */ (function (_super) {
                 return gettedContext;
             }, {});
         };
-        _this.listenContext = function (callback) {
-            // Not implemented
-        };
         var initContextValue = props.initContextValue;
         var _a = _this, setContextProxy = _a.setContextProxy, getContext = _a.getContext;
         _this.state = __assign(__assign({}, initContextValue), { setContext: function (context) {
                 setContextProxy(this, context);
-            }, getContext: getContext, listenContext: _this.listenContext });
+            }, getContext: getContext });
         return _this;
     }
     ContextProvider.prototype.render = function () {
-        var contextType = this.props.contextType;
-        return (React.createElement(contextType.Provider, { value: this.state }, this.props.children));
+        var _a = this.props, contextType = _a.contextType, children = _a.children;
+        return (React.createElement(contextType.Provider, { value: this.state }, typeof children === 'function'
+            ? React.createElement(children, this.state)
+            : children));
     };
     return ContextProvider;
 }(React.Component));

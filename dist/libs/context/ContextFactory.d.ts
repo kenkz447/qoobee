@@ -1,12 +1,8 @@
 import * as React from 'react';
-import { ContextProvider } from './ContextProvider';
+import { WithContextProps } from './Types';
 export declare type ContextFactoryProps<T> = {
-    initContextValue: T;
+    initContextValue?: T;
     contextType: React.Context<T>;
+    children?: React.ReactNode | React.Component<WithContextProps<T>>;
 };
-export declare class ContextFactory<C = {}> extends React.Component<ContextFactoryProps<C>> {
-    Context: React.Context<C>;
-    provider: ContextProvider<C>;
-    constructor(props: ContextFactoryProps<C>);
-    render(): JSX.Element;
-}
+export declare function ContextFactory<C = {}>(props: ContextFactoryProps<C>): JSX.Element;

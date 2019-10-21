@@ -10,3 +10,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var getDefaultInitContext_1 = require("./getDefaultInitContext");
 exports.rootContextType = React.createContext(getDefaultInitContext_1.getDefaultInitContext());
+exports.rootContextType.displayName = 'RootContextType';

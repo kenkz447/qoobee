@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-var Root_1 = require("./Root");
+var app_1 = require("../app");
 var libs_1 = require("../libs");
 var Page = /** @class */ (function (_super) {
     __extends(Page, _super);
@@ -52,7 +52,7 @@ var Page = /** @class */ (function (_super) {
     Page.prototype.componentDidUpdate = function () {
         this.setDocumentTitle();
     };
-    Page.contextType = Root_1.Root.contextType;
+    Page.contextType = app_1.rootContextType;
     return Page;
 }(React.PureComponent));
 exports.Page = Page;

@@ -4,5 +4,4 @@ export declare type ListenContextCallback = (...contextKeys: string[]) => void;
 export declare type WithContextProps<T = {}, OwnProps = {}> = T & OwnProps & {
     setContext: SetContext<T>;
     getContext: GetContext<T>;
-    listenContext: (callback: ListenContextCallback) => void;
 };

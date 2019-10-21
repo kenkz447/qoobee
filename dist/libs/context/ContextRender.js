@@ -38,6 +38,9 @@ var ContextRender = /** @class */ (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.renderConsumer = function (contextValue) {
             var _a = _this.props, children = _a.children, keys = _a.keys;
+            if (!keys) {
+                return children(contextValue);
+            }
             var contextToProps = keys.reduce(function (childContext, childContextKey) {
                 var _a;
                 return __assign(__assign({}, childContext), (_a = {}, _a[childContextKey] = contextValue[childContextKey], _a));
@@ -54,5 +57,5 @@ var ContextRender = /** @class */ (function (_super) {
         return (React.createElement(contextType.Consumer, null, this.renderConsumer));
     };
     return ContextRender;
-}(React.PureComponent));
+}(React.Component));
 exports.ContextRender = ContextRender;

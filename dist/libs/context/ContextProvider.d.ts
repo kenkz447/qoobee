@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { WithContextProps, ListenContextCallback } from './Types';
-interface ContextProviderProps {
-    loggingEnabled?: boolean;
-    initContextValue: {};
+interface ContextProviderProps<T> {
+    initContextValue: T;
+    contextType: React.Context<T>;
 }
-declare type ContextProviderState = Required<WithContextProps>;
-export declare class ContextProvider extends React.Component<ContextProviderProps, ContextProviderState> {
-    setContextProxy: (source: any, newContext: any) => void;
-    getContext: (...contextKeys: any[]) => any;
-    log: (source: any, newContext: any, oldContext: any) => void;
-    constructor(props: ContextProviderProps);
-    listenContext: (callback: ListenContextCallback) => void;
+declare type ContextProviderState<C> = C & Required<WithContextProps>;
+export declare class ContextProvider<C> extends React.Component<ContextProviderProps<C>, ContextProviderState<C>> {
+    private readonly setContextProxy;
+    private readonly getContext;
+    constructor(props: ContextProviderProps<C>);
+    readonly listenContext: (callback: ListenContextCallback) => void;
     render(): JSX.Element;
 }
 export {};

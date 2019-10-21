@@ -22,9 +22,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var context_1 = require("../context");
-var I18NLoader = /** @class */ (function (_super) {
-    __extends(I18NLoader, _super);
-    function I18NLoader(props) {
+var app_1 = require("../../app");
+var I18NLoaderInjected = /** @class */ (function (_super) {
+    __extends(I18NLoaderInjected, _super);
+    function I18NLoaderInjected(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             currentLanguage: props.currentLanguage
@@ -32,7 +33,7 @@ var I18NLoader = /** @class */ (function (_super) {
         localStorage.setItem('lang', _this.state.currentLanguage);
         return _this;
     }
-    I18NLoader.getDerivedStateFromProps = function (nextProps, state) {
+    I18NLoaderInjected.getDerivedStateFromProps = function (nextProps, state) {
         if (nextProps.currentLanguage !== state.currentLanguage) {
             return {
                 currentLanguage: nextProps.currentLanguage,
@@ -41,7 +42,7 @@ var I18NLoader = /** @class */ (function (_super) {
         }
         return null;
     };
-    I18NLoader.prototype.componentDidUpdate = function () {
+    I18NLoaderInjected.prototype.componentDidUpdate = function () {
         if (this.state.needsUpdate) {
             localStorage.setItem('lang', this.state.currentLanguage);
             this.setState({
@@ -49,12 +50,13 @@ var I18NLoader = /** @class */ (function (_super) {
             });
         }
     };
-    I18NLoader.prototype.render = function () {
+    I18NLoaderInjected.prototype.render = function () {
         if (this.state.needsUpdate) {
             return null;
         }
         return this.props.children;
     };
-    return I18NLoader;
+    return I18NLoaderInjected;
 }(React.PureComponent));
-exports.default = context_1.withContext('currentLanguage')(I18NLoader);
+var I18NLoaderInjector = context_1.withContext(app_1.rootContextType, 'currentLanguage');
+exports.I18NLoader = I18NLoaderInjector(I18NLoaderInjected);

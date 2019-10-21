@@ -32,19 +32,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-var ContextFactory_1 = require("./ContextFactory");
 var ContextProvider = /** @class */ (function (_super) {
     __extends(ContextProvider, _super);
     function ContextProvider(props) {
         var _this = _super.call(this, props) || this;
         _this.setContextProxy = function (source, newContext) {
-            var loggingEnabled = _this.props.loggingEnabled;
             var newContextKey = Object.keys(newContext);
             var oldContext = _this.getContext(newContextKey);
             var setContextCallback = (function () {
-                if (loggingEnabled) {
-                    _this.log(source, newContext, oldContext);
-                }
+                //
             });
             _this.setState(newContext, setContextCallback);
         };
@@ -61,14 +57,8 @@ var ContextProvider = /** @class */ (function (_super) {
                 return gettedContext;
             }, {});
         };
-        _this.log = function (source, newContext, oldContext) {
-            console.group('Context was changed');
-            console.log('By: ', source);
-            console.log('From:', oldContext);
-            console.log('To:', newContext);
-            console.groupEnd();
-        };
         _this.listenContext = function (callback) {
+            // Not implemented
         };
         var initContextValue = props.initContextValue;
         var _a = _this, setContextProxy = _a.setContextProxy, getContext = _a.getContext;
@@ -78,8 +68,8 @@ var ContextProvider = /** @class */ (function (_super) {
         return _this;
     }
     ContextProvider.prototype.render = function () {
-        var Context = ContextFactory_1.ContextFactory.instance.Context;
-        return (React.createElement(Context.Provider, { value: this.state }, this.props.children));
+        var contextType = this.props.contextType;
+        return (React.createElement(contextType.Provider, { value: this.state }, this.props.children));
     };
     return ContextProvider;
 }(React.Component));

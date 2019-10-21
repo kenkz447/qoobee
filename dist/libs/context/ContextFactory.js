@@ -26,15 +26,14 @@ var ContextFactory = /** @class */ (function (_super) {
     __extends(ContextFactory, _super);
     function ContextFactory(props) {
         var _this = _super.call(this, props) || this;
-        var context = _this.props.context;
+        var context = _this.props.contextType;
         _this.Context = context;
-        ContextFactory.instance = _this;
         return _this;
     }
     ContextFactory.prototype.render = function () {
         var _this = this;
-        var _a = this.props, loggingEnabled = _a.loggingEnabled, children = _a.children, initContextValue = _a.initContextValue;
-        return (React.createElement(ContextProvider_1.ContextProvider, { ref: function (e) { return _this.provider = e; }, initContextValue: initContextValue, loggingEnabled: loggingEnabled }, children));
+        var _a = this.props, children = _a.children, context = _a.contextType, initContextValue = _a.initContextValue;
+        return (React.createElement(ContextProvider_1.ContextProvider, { ref: function (e) { return _this.provider = e; }, contextType: context, initContextValue: initContextValue }, children));
     };
     return ContextFactory;
 }(React.Component));

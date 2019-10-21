@@ -32,27 +32,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-var ContextFactory_1 = require("./ContextFactory");
 var ContextRender = /** @class */ (function (_super) {
     __extends(ContextRender, _super);
     function ContextRender() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.renderConsumer = function (context) {
+        _this.renderConsumer = function (contextValue) {
             var _a = _this.props, children = _a.children, keys = _a.keys;
             var contextToProps = keys.reduce(function (childContext, childContextKey) {
                 var _a;
-                return __assign(__assign({}, childContext), (_a = {}, _a[childContextKey] = context[childContextKey], _a));
+                return __assign(__assign({}, childContext), (_a = {}, _a[childContextKey] = contextValue[childContextKey], _a));
             }, {
-                setContext: context.setContext,
-                getContext: context.getContext
+                setContext: contextValue.setContext,
+                getContext: contextValue.getContext
             });
             return children(contextToProps);
         };
         return _this;
     }
     ContextRender.prototype.render = function () {
-        var Context = ContextFactory_1.ContextFactory.instance.Context;
-        return (React.createElement(Context.Consumer, null, this.renderConsumer));
+        var contextType = this.props.contextType;
+        return (React.createElement(contextType.Consumer, null, this.renderConsumer));
     };
     return ContextRender;
 }(React.PureComponent));

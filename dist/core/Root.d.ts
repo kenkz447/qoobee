@@ -8,7 +8,7 @@ export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
     readonly SWRegistrationProps?: ServiceWorkerRegistrationProps;
 }
 export declare class Root extends React.Component<RootProps> {
-    static readonly contextType: React.Context<{}>;
+    static readonly contextType: React.Context<AppCoreContext<{}>>;
     static readonly render: (rootElement: HTMLElement, rootProps: RootProps<AppCoreContext<{}>>) => Promise<JSX.Element>;
     componentDidMount(): void;
     render(): JSX.Element;

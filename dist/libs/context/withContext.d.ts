@@ -1,12 +1,17 @@
 import * as React from 'react';
-export declare function withContext<C = {}, P = {}>(...keys: Array<keyof C>): <CP extends React.ComponentType<P & C & {
+import { WithContextProps } from './Types';
+export declare function withContext<C = {}>(Context: React.Context<C>, ...keys: Array<keyof C>): <P, CP extends React.ComponentType<P & C & {
+    setContext: import("./Types").SetContext<C>;
+    getContext: import("./Types").GetContext<C>;
+    listenContext: (callback: import("./Types").ListenContextCallback) => void;
+}> = React.ComponentType<P & C & {
     setContext: import("./Types").SetContext<C>;
     getContext: import("./Types").GetContext<C>;
     listenContext: (callback: import("./Types").ListenContextCallback) => void;
 }>>(Component: CP) => {
     new (props: Readonly<P>): {
+        readonly renderConsumer: (contextValue: WithContextProps<C, P>) => JSX.Element;
         render(): JSX.Element;
-        renderConsumer: (context: any) => JSX.Element;
         context: any;
         setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<P>) => {} | Pick<{}, K> | null) | Pick<{}, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;
@@ -31,8 +36,8 @@ export declare function withContext<C = {}, P = {}>(...keys: Array<keyof C>): <C
         UNSAFE_componentWillUpdate?(nextProps: Readonly<P>, nextState: Readonly<{}>, nextContext: any): void;
     };
     new (props: P, context?: any): {
+        readonly renderConsumer: (contextValue: WithContextProps<C, P>) => JSX.Element;
         render(): JSX.Element;
-        renderConsumer: (context: any) => JSX.Element;
         context: any;
         setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<P>) => {} | Pick<{}, K> | null) | Pick<{}, K> | null, callback?: (() => void) | undefined): void;
         forceUpdate(callback?: (() => void) | undefined): void;

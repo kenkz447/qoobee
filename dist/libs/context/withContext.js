@@ -43,23 +43,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-var ContextFactory_1 = require("./ContextFactory");
 var ContextInjectWrapper_1 = require("./ContextInjectWrapper");
-function withContext() {
+function withContext(Context) {
     var keys = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        keys[_i] = arguments[_i];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        keys[_i - 1] = arguments[_i];
     }
+    // tslint:disable-next-line:max-line-length
     return function (Component) {
-        var getContextToProps = function (context) {
+        var getContextToProps = function (contextValue) {
             var e_1, _a;
             var contextToProps = {};
             if (keys) {
                 try {
-                    // Add context request by keys
                     for (var keys_1 = __values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
                         var contextKey = keys_1_1.value;
-                        contextToProps[contextKey] = context[contextKey];
+                        contextToProps[contextKey] = contextValue[contextKey];
                     }
                 }
                 catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -70,27 +69,25 @@ function withContext() {
                     finally { if (e_1) throw e_1.error; }
                 }
             }
-            // Add required context
-            contextToProps.setContext = context.setContext;
-            contextToProps.getContext = context.getContext;
+            contextToProps.setContext = contextValue.setContext;
+            contextToProps.getContext = contextValue.getContext;
             return contextToProps;
         };
         return /** @class */ (function (_super) {
-            __extends(Injector, _super);
-            function Injector() {
+            __extends(ContextInjector, _super);
+            function ContextInjector() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this.renderConsumer = function (context) {
-                    var contextToProps = getContextToProps(context);
+                _this.renderConsumer = function (contextValue) {
+                    var contextToProps = getContextToProps(contextValue);
                     var componentPropsWithContext = Object.assign(contextToProps, _this.props);
                     return React.createElement(ContextInjectWrapper_1.InjectedWrapper, __assign({ Component: Component }, componentPropsWithContext));
                 };
                 return _this;
             }
-            Injector.prototype.render = function () {
-                var Context = ContextFactory_1.ContextFactory.instance.Context;
+            ContextInjector.prototype.render = function () {
                 return (React.createElement(Context.Consumer, null, this.renderConsumer));
             };
-            return Injector;
+            return ContextInjector;
         }(React.PureComponent));
     };
 }

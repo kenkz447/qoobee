@@ -24,9 +24,9 @@ var history_1 = require("history");
 var app_1 = require("../app");
 var React = __importStar(require("react"));
 var libs_1 = require("../libs");
-var HistoryMiddleware = /** @class */ (function (_super) {
-    __extends(HistoryMiddleware, _super);
-    function HistoryMiddleware(props) {
+var HistoryMiddlewareInjected = /** @class */ (function (_super) {
+    __extends(HistoryMiddlewareInjected, _super);
+    function HistoryMiddlewareInjected(props) {
         var _this = _super.call(this, props) || this;
         _this.createHistoryMiddleware = function (history) {
             var originPush = history.push;
@@ -77,13 +77,14 @@ var HistoryMiddleware = /** @class */ (function (_super) {
         });
         return _this;
     }
-    HistoryMiddleware.prototype.render = function () {
+    HistoryMiddlewareInjected.prototype.render = function () {
         var _a = this.props, history = _a.history, children = _a.children;
         if (!history) {
             return null;
         }
         return children;
     };
-    return HistoryMiddleware;
+    return HistoryMiddlewareInjected;
 }(React.PureComponent));
-exports.default = libs_1.withContext('history', 'currentRole')(HistoryMiddleware);
+exports.HistoryMiddlewareInjector = libs_1.withContext(app_1.rootContextType, 'history', 'currentRole');
+exports.HistoryMiddleware = exports.HistoryMiddlewareInjector(HistoryMiddlewareInjected);

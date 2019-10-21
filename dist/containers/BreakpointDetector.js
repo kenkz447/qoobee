@@ -21,13 +21,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-var libs_1 = require("../libs");
+var app_1 = require("../app");
 var BreakpointDetector = /** @class */ (function (_super) {
     __extends(BreakpointDetector, _super);
     function BreakpointDetector(props) {
         var _this = _super.call(this, props) || this;
         _this.onWindowResize = function () {
-            var _a = _this.props, resolver = _a.resolver, setContext = _a.setContext;
+            var setContext = _this.context.setContext;
+            var resolver = _this.props.resolver;
             var nextBreakpoint = resolver(window.innerWidth);
             setContext({
                 currentBreakpoint: nextBreakpoint
@@ -42,6 +43,7 @@ var BreakpointDetector = /** @class */ (function (_super) {
     BreakpointDetector.prototype.render = function () {
         return this.props.children || null;
     };
+    BreakpointDetector.contextType = app_1.rootContextType;
     BreakpointDetector.defaultProps = {
         resolver: function (windowWith) {
             if (windowWith >= 1200) {
@@ -55,4 +57,4 @@ var BreakpointDetector = /** @class */ (function (_super) {
     };
     return BreakpointDetector;
 }(React.PureComponent));
-exports.default = libs_1.withContext()(BreakpointDetector);
+exports.BreakpointDetector = BreakpointDetector;

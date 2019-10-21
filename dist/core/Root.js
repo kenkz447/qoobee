@@ -70,8 +70,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var ReactDOM = __importStar(require("react-dom"));
 var app_1 = require("../app");
-var containers_1 = require("../containers");
 var libs_1 = require("../libs");
+var HistoryMiddleware_1 = require("./HistoryMiddleware");
 var Root = /** @class */ (function (_super) {
     __extends(Root, _super);
     function Root() {
@@ -86,10 +86,10 @@ var Root = /** @class */ (function (_super) {
     };
     Root.prototype.render = function () {
         var _a = this.props, renderApp = _a.renderApp, initialContext = _a.initialContext;
-        return (React.createElement(libs_1.ContextFactory, { context: Root.contextType, initContextValue: initialContext },
-            React.createElement(containers_1.HistoryMiddleware, null, renderApp(initialContext))));
+        return (React.createElement(libs_1.ContextFactory, { contextType: Root.contextType, initContextValue: initialContext },
+            React.createElement(HistoryMiddleware_1.HistoryMiddleware, null, renderApp(initialContext))));
     };
-    Root.contextType = React.createContext({});
+    Root.contextType = app_1.rootContextType;
     Root.render = function (rootElement, rootProps) { return __awaiter(void 0, void 0, void 0, function () {
         var bootstrappedContext, appElement;
         return __generator(this, function (_a) {

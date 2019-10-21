@@ -25,7 +25,7 @@
                     "${workspaceRoot}/jest.config.json"
                 ],
             },
-            "console": "integratedTerminal",
+            "console": "externalTerminal",
             "internalConsoleOptions": "neverOpen"
         },
     ]

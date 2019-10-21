@@ -34,14 +34,13 @@ var BreakpointDetector = /** @class */ (function (_super) {
                 currentBreakpoint: nextBreakpoint
             });
         };
-        _this.onWindowResize();
         return _this;
     }
     BreakpointDetector.prototype.componentDidMount = function () {
         window.addEventListener('resize', this.onWindowResize);
     };
     BreakpointDetector.prototype.render = function () {
-        return this.props.children || null;
+        return null;
     };
     BreakpointDetector.contextType = app_1.rootContextType;
     BreakpointDetector.defaultProps = {

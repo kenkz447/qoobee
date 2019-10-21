@@ -2,7 +2,6 @@ import * as React from 'react';
 import { AppCoreContext } from '../../Types';
 import { WithContextProps } from '../context';
 interface I18NLoaderProps {
-    abc: string;
 }
 export declare const I18NLoader: {
     new (props: Readonly<I18NLoaderProps>): {

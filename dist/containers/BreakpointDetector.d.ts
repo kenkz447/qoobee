@@ -10,5 +10,5 @@ export declare class BreakpointDetector extends React.PureComponent<BreakpointDe
     constructor(props: WithContextProps<AppCoreContext, BreakpointDetectorProps>);
     readonly onWindowResize: () => void;
     componentDidMount(): void;
-    render(): {} | null;
+    render(): null;
 }

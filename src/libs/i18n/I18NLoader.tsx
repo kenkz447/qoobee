@@ -10,7 +10,6 @@ interface I18NState {
 }
 
 interface I18NLoaderProps {
-    abc: string;
 }
 
 type I18NLoaderInjectedProps = I18NLoaderProps & WithContextProps<AppCoreContext>;

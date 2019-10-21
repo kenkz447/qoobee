@@ -1,5 +1,7 @@
+import * as React from 'react';
+
 import { AppCoreContext, Policy } from '../Types';
-import { WithContextProps, withContext } from '../libs';
+import { rootContextType } from '../app';
 
 interface AccessControlProps {
     readonly funcKey?: string;
@@ -9,10 +11,8 @@ interface AccessControlProps {
     readonly renderDeny?: () => React.ReactNode;
 }
 
-type WithPolicies = Pick<AppCoreContext, 'policies'>;
-
 function policyIsAllowed(
-    policies: WithPolicies['policies'],
+    policies: Pick<AppCoreContext, 'policies'>,
     funcKey: string | undefined,
     policy: string | Policy,
     values: any,
@@ -25,45 +25,49 @@ function policyIsAllowed(
     return policies![policy] ? policies![policy](appContext, funcKey) : false;
 }
 
-function AccessControl(props: WithContextProps<WithPolicies, AccessControlProps>) {
-    const {
-        funcKey,
-        policy,
-        children,
-        policies,
-        getContext,
-        renderDeny,
-        values
-    } = props;
+export class AccessControl extends React.PureComponent<AccessControlProps> {
+    public static readonly contextType = rootContextType;
+    public render() {
+        const {
+            policies,
+            getContext 
+        } = this.context;
 
-    if (!policies) {
-        if (typeof renderDeny === 'function') {
-            return renderDeny();
+        const {
+            funcKey,
+            policy,
+            children,
+            renderDeny,
+            values
+        } = this.props;
+
+        if (!policies) {
+            if (typeof renderDeny === 'function') {
+                return renderDeny();
+            }
+
+            return null;
         }
 
-        return null;
-    }
+        const appContext = getContext();
 
-    const appContext = getContext();
-
-    let isAllowed: boolean = true;
-    if (Array.isArray(policy)) {
-        for (const policyName of policy) {
-            isAllowed = policyIsAllowed(policies, funcKey, policyName, values, appContext);
-        }
-    } else {
-        isAllowed = policyIsAllowed(policies, funcKey, policy, values, appContext);
-    }
-
-    if (!isAllowed) {
-        if (typeof renderDeny === 'function') {
-            return renderDeny();
+        let isAllowed: boolean = true;
+        if (Array.isArray(policy)) {
+            for (const policyName of policy) {
+                isAllowed = policyIsAllowed(policies, funcKey, policyName, values, appContext);
+            }
+        } else {
+            isAllowed = policyIsAllowed(policies, funcKey, policy, values, appContext);
         }
 
-        return null;
-    }
+        if (!isAllowed) {
+            if (typeof renderDeny === 'function') {
+                return renderDeny();
+            }
 
-    return typeof children === 'function' ? children() : children;
+            return null;
+        }
+
+        return children instanceof Function ? children() : children;
+    }
 }
-
-export default withContext<AppCoreContext, AccessControlProps>('policies')(AccessControl);

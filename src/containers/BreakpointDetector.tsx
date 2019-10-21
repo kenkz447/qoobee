@@ -2,12 +2,15 @@ import * as React from 'react';
 
 import { AppCoreContext, BreakPoint } from '../Types';
 import { WithContextProps, withContext } from '../libs';
+import { rootContextType } from '../app';
 
 export interface BreakpointDetectorProps {
     readonly resolver?: (windowWidth: number) => BreakPoint;
 }
 
-class BreakpointDetector extends React.PureComponent<WithContextProps<AppCoreContext, BreakpointDetectorProps>> {
+export class BreakpointDetector extends React.PureComponent<BreakpointDetectorProps> {
+    public static readonly contextType = rootContextType;
+
     static readonly defaultProps: Partial<BreakpointDetectorProps> = {
         resolver: (windowWith: number) => {
             if (windowWith >= 1200) {
@@ -28,7 +31,8 @@ class BreakpointDetector extends React.PureComponent<WithContextProps<AppCoreCon
     }
 
     readonly onWindowResize = () => {
-        const { resolver, setContext } = this.props;
+        const { setContext } = this.context;
+        const { resolver } = this.props;
         const nextBreakpoint = resolver!(window.innerWidth);
 
         setContext({
@@ -44,5 +48,3 @@ class BreakpointDetector extends React.PureComponent<WithContextProps<AppCoreCon
         return this.props.children || null;
     }
 }
-
-export default withContext<AppCoreContext, BreakpointDetectorProps>()(BreakpointDetector);

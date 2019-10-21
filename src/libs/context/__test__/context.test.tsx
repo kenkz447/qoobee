@@ -21,12 +21,12 @@ interface FooComponentProps {
 }
 
 describe('Lib Context', () => {
-    const appContextValue: AppContext = {
+    const initContextValue: AppContext = {
         foo: 1,
         bar: 2
     };
 
-    const appContext = React.createContext(appContextValue);
+    const appContext = React.createContext(initContextValue);
 
     // #Foo Component
     const renderFoo = jest.fn((...props) => null);
@@ -37,29 +37,40 @@ describe('Lib Context', () => {
         }
     }
 
-    const Foo = withContext<AppContext, FooComponentProps>('foo')(FooComponent);
+    const Foo = withContext(appContext, 'foo')<FooComponentProps>(FooComponent);
 
     // #Bar Component
     const renderBar = jest.fn((...props) => null);
-    
+
     class BarComponent extends React.Component<WithContextProps<AppContext, BarComponentProps>> {
         render() {
             return renderBar(this.props);
         }
     }
 
-    const Bar = withContext<AppContext, BarComponentProps>('bar')(BarComponent);
+    const Bar = withContext(appContext, 'bar')<BarComponentProps>(BarComponent);
+
+    const renderBaz = jest.fn((...props) => null);
+
+    class BazComponent extends React.Component<WithContextProps<AppContext, BarComponentProps>> {
+        render() {
+            return renderBaz(this.props);
+        }
+    }
+
+    const Baz = withContext(appContext)<AppContext>(BazComponent);
 
     const contextRender = jest.fn((...props) => null);
 
     const AppRenderer = TestRenderer.create(
         <ContextFactory
-            context={appContext}
-            initContextValue={appContextValue}
+            contextType={appContext}
+            initContextValue={initContextValue}
         >
             <Foo />
             <Bar />
-            <ContextRender<AppContext> keys={['foo']}>
+            <Baz />
+            <ContextRender contextType={appContext} keys={['foo']}>
                 {(props) => contextRender(props)}
             </ContextRender>
         </ContextFactory>
@@ -68,7 +79,7 @@ describe('Lib Context', () => {
     const AppRendererInstance = AppRenderer.getInstance();
     const ProviderTestInstance = AppRenderer.root.findByType(ContextProvider);
 
-    const providerElement = ProviderTestInstance.instance as ContextProvider;
+    const providerElement = ProviderTestInstance.instance as ContextProvider<AppContext>;
     const providerDefaultProps = {
         setContext: providerElement.state.setContext as WithContextProps<AppContext>['setContext'],
         getContext: providerElement.state.getContext as WithContextProps<AppContext>['getContext']
@@ -80,27 +91,32 @@ describe('Lib Context', () => {
 
     it('should Foo and Bar rendered with initial context', () => {
         const initialFooProps: AppContext = {
-            foo: appContextValue.foo,
+            foo: initContextValue.foo,
             ...providerDefaultProps
         };
 
         expect(renderFoo).toBeCalledWith(initialFooProps);
 
         const initialBarProps: AppContext = {
-            bar: appContextValue.bar,
+            bar: initContextValue.bar,
             ...providerDefaultProps
         };
+
         expect(renderBar).toBeCalledWith(initialBarProps);
+        expect(renderBaz).toHaveBeenCalledWith({
+            ...initContextValue,
+            ...providerDefaultProps
+        });
     });
 
     it('should get all initial context', () => {
         const initialContext = providerDefaultProps.getContext('bar', 'foo');
-        expect(initialContext).toEqual(appContextValue);
+        expect(initialContext).toEqual(initContextValue);
     });
 
     it('should ContextRender rendered with init context and setContext parms', () => {
         expect(contextRender).toBeCalledWith({
-            foo: appContextValue.foo,
+            foo: initContextValue.foo,
             ...providerDefaultProps
         });
     });
@@ -140,8 +156,8 @@ describe('Lib Context', () => {
 
         AppRenderer.update(
             <ContextFactory
-                context={appContext}
-                initContextValue={appContextValue}
+                contextType={appContext}
+                initContextValue={initContextValue}
             >
                 <Foo fooPrimayProps={nextFooPrimayProps} />
                 <Bar />

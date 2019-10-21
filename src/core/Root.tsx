@@ -5,12 +5,14 @@ import {
     ServiceWorkerRegistrationProps,
     swRegistration,
     Middleware,
-    runMiddlewares
+    runMiddlewares,
+    rootContextType
 } from '../app';
 
-import { HistoryMiddleware } from '../containers';
 import { ContextFactory } from '../libs';
 import { AppCoreContext } from '../Types';
+
+import { HistoryMiddleware } from './HistoryMiddleware';
 
 export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
     readonly renderApp: (appContext: Context) => React.ReactNode;
@@ -21,7 +23,7 @@ export interface RootProps<Context extends AppCoreContext = AppCoreContext> {
 
 export class Root extends React.Component<RootProps> {
 
-    public static readonly contextType = React.createContext({});
+    public static readonly contextType = rootContextType;
 
     public static readonly render = async (rootElement: HTMLElement, rootProps: RootProps) => {
         const bootstrappedContext = await runMiddlewares(
@@ -49,7 +51,7 @@ export class Root extends React.Component<RootProps> {
 
         return (
             <ContextFactory
-                context={Root.contextType}
+                contextType={Root.contextType}
                 initContextValue={initialContext}
             >
                 <HistoryMiddleware>

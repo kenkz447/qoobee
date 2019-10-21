@@ -3,43 +3,32 @@ import {
     History,
     LocationDescriptorObject
 } from 'history';
-import { events, ON_HISTORY_PUSH, ON_HISTORY_REPLACE } from '../app';
 import * as React from 'react';
+
+import { rootContextType } from '../app';
 import { WithContextProps, withContext } from '../libs';
 import { AppCoreContext } from '../Types';
 
 interface HistoryMiddlewareOwnProps {
-    readonly children: React.ReactNode;
 }
 
-type HistoryMiddlewareProps = WithContextProps<AppCoreContext, HistoryMiddlewareOwnProps>;
+type HistoryMiddlewareContext = Pick<AppCoreContext, 'history'> & Pick<AppCoreContext, 'currentRole'>;
+type HistoryMiddlewareProps = WithContextProps<HistoryMiddlewareContext, HistoryMiddlewareOwnProps>;
 
-class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
+class HistoryMiddlewareInjected extends React.PureComponent<HistoryMiddlewareProps> {
     constructor(props: HistoryMiddlewareProps) {
         super(props);
         const { setContext } = props;
-
         setContext({
             history: this.createHistory()
         });
     }
-
-    public render() {
-        const { history, children } = this.props;
-
-        if (!history) {
-            return null;
-        }
-
-        return children;
-    }
-
+    
     private readonly createHistoryMiddleware = (history: History<{}>) => {
         const originPush = history.push;
         const originReplace = history.replace;
 
         const nextReplace = function () {
-            events.emit(ON_HISTORY_REPLACE, arguments);
             originReplace.apply(window, arguments);
         };
 
@@ -88,9 +77,22 @@ class HistoryMiddleware extends React.PureComponent<HistoryMiddlewareProps> {
         const middleWares = this.createHistoryMiddleware(history);
         return this.applyHistoryMiddeware(history, middleWares);
     }
+    
+    public render() {
+        const { history, children } = this.props;
+
+        if (!history) {
+            return null;
+        }
+
+        return children;
+    }
 }
 
-export default withContext<AppCoreContext, HistoryMiddlewareOwnProps>(
+export const HistoryMiddlewareInjector = withContext(
+    rootContextType,
     'history',
     'currentRole'
-)(HistoryMiddleware);
+);
+
+export const HistoryMiddleware = HistoryMiddlewareInjector(HistoryMiddlewareInjected);

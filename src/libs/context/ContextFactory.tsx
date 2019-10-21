@@ -2,36 +2,27 @@ import * as React from 'react';
 
 import { ContextProvider } from './ContextProvider';
 
-export type ContextFactoryProps<T = {}> = {
+export type ContextFactoryProps<T> = {
     initContextValue: T;
-    context: React.Context<T>
-    loggingEnabled?: boolean;
+    contextType: React.Context<T>;
 };
 
-export class ContextFactory extends React.Component<ContextFactoryProps> {
-    static instance: ContextFactory;
-    Context: React.Context<{}>;
-    provider!: ContextProvider;
-
-    constructor(props: ContextFactoryProps) {
+export class ContextFactory<C = {}> extends React.Component<ContextFactoryProps<C>> {
+    constructor(props: ContextFactoryProps<C>) {
         super(props);
-        const { context } = this.props;
-        this.Context = context;
-        ContextFactory.instance = this;
     }
 
     render() {
         const {
-            loggingEnabled,
             children,
+            contextType,
             initContextValue
         } = this.props;
 
         return (
             <ContextProvider
-                ref={(e: ContextProvider) => this.provider = e}
+                contextType={contextType}
                 initContextValue={initContextValue}
-                loggingEnabled={loggingEnabled}
             >
                 {children}
             </ContextProvider>

@@ -1,41 +1,35 @@
 import * as React from 'react';
 
 import { WithContextProps } from './Types';
-import { ContextFactory } from './ContextFactory';
 import { InjectedWrapper } from './ContextInjectWrapper';
 
-export function withContext<C = {}, P = {}>(...keys: Array<keyof C>) {
-    return function <CP extends React.ComponentType<P & WithContextProps<C, P>>>(Component: CP) {
-        const getContextToProps = (context: C & WithContextProps) => {
-            const contextToProps: Partial<C & WithContextProps> = {};
+export function withContext<C = {}, CO extends C = C>(Context: React.Context<CO>, ...keys: Array<keyof CO>) {
+    // tslint:disable-next-line:max-line-length
+    return function <P, CP extends React.ComponentType<P & WithContextProps<C, P>> = React.ComponentType<P & WithContextProps<C, P>>>(
+        Component: CP
+    ) {
+        type ContextValue = WithContextProps<CO, P>;
 
-            if (keys) {
-                // Add context request by keys
-                for (const contextKey of keys) {
-                    contextToProps[contextKey] = context[contextKey];
-                }
+        const getContextToProps = (contextValue: ContextValue) => {
+            if (!keys.length) {
+                return contextValue;
             }
 
-            // Add required context
-            contextToProps.setContext = context.setContext;
-            contextToProps.getContext = context.getContext;
+            let contextToProps: Partial<ContextValue> = {};
+
+            for (const contextKey of keys) {
+                contextToProps[contextKey] = contextValue[contextKey];
+            }
+
+            contextToProps.setContext = contextValue.setContext;
+            contextToProps.getContext = contextValue.getContext;
 
             return contextToProps;
         };
 
-        return class Injector extends React.PureComponent<P> {
-            render() {
-                const { Context } = ContextFactory.instance;
-
-                return (
-                    <Context.Consumer>
-                        {this.renderConsumer}
-                    </Context.Consumer>
-                );
-            }
-
-            renderConsumer = (context) => {
-                const contextToProps = getContextToProps(context);
+        return class ContextInjector extends React.PureComponent<P> {
+            public readonly renderConsumer = (contextValue: ContextValue) => {
+                const contextToProps = getContextToProps(contextValue);
 
                 const componentPropsWithContext = Object.assign(
                     contextToProps,
@@ -43,6 +37,14 @@ export function withContext<C = {}, P = {}>(...keys: Array<keyof C>) {
                 ) as P & WithContextProps;
 
                 return <InjectedWrapper Component={Component} {...componentPropsWithContext} />;
+            }
+
+            public render() {
+                return (
+                    <Context.Consumer>
+                        {this.renderConsumer}
+                    </Context.Consumer>
+                );
             }
         };
     };

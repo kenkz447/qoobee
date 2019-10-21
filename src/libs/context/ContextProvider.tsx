@@ -1,30 +1,26 @@
 import * as React from 'react';
 import { WithContextProps, ListenContextCallback } from './Types';
-import { ContextFactory } from './ContextFactory';
 
-interface ContextProviderProps {
-    loggingEnabled?: boolean;
-    initContextValue: {};
+interface ContextProviderProps<T> {
+    initContextValue: T;
+    contextType: React.Context<T>;
 }
 
-type ContextProviderState = Required<WithContextProps>;
+type ContextProviderState<C> = C & Required<WithContextProps>;
 
-export class ContextProvider extends React.Component<ContextProviderProps, ContextProviderState> {
-    setContextProxy = (source, newContext) => {
-        const { loggingEnabled } = this.props;
+export class ContextProvider<C> extends React.Component<ContextProviderProps<C>, ContextProviderState<C>> {
+    private readonly setContextProxy = (source, newContext) => {
         const newContextKey = Object.keys(newContext);
         const oldContext = this.getContext(newContextKey);
 
         const setContextCallback = (() => {
-            if (loggingEnabled) {
-                this.log(source, newContext, oldContext);
-            }
+            //
         });
 
         this.setState(newContext, setContextCallback);
     }
 
-    getContext = (...contextKeys) => {
+    private readonly getContext = (...contextKeys) => {
         if (!contextKeys || !contextKeys.length) {
             return Object.seal(this.state);
         }
@@ -38,15 +34,7 @@ export class ContextProvider extends React.Component<ContextProviderProps, Conte
         );
     }
 
-    log = (source, newContext, oldContext) => {
-        console.group('Context was changed');
-        console.log('By: ', source);
-        console.log('From:', oldContext);
-        console.log('To:', newContext);
-        console.groupEnd();
-    }
-
-    constructor(props: ContextProviderProps) {
+    constructor(props: ContextProviderProps<C>) {
         super(props);
 
         const { initContextValue } = props;
@@ -57,22 +45,17 @@ export class ContextProvider extends React.Component<ContextProviderProps, Conte
             setContext(context: any) {
                 setContextProxy(this, context);
             },
-            getContext: getContext,
-            listenContext: this.listenContext
+            getContext: getContext
         };
     }
 
-    listenContext = (callback: ListenContextCallback) => {
-        
-    }
-
-    render() {
-        const { Context } = ContextFactory.instance;
+    public render() {
+        const { contextType } = this.props;
 
         return (
-            <Context.Provider value={this.state}>
+            <contextType.Provider value={this.state}>
                 {this.props.children}
-            </Context.Provider>
+            </contextType.Provider>
         );
     }
 }

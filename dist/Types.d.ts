@@ -14,6 +14,7 @@ export interface MenuItem {
     readonly url: string;
     readonly icon?: string;
     readonly label: string;
+    readonly children?: MenuItem[];
 }
 export interface AppCoreContext<U = {}> {
     readonly currentUser: U | null;

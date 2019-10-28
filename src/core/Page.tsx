@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { RouteInfo } from '../Types';
+import { RouteInfo, MenuItem } from '../Types';
 
 import { rootContextType } from '../app';
 import { ReactUrlQuery } from '../libs';

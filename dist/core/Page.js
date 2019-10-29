@@ -22,12 +22,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
 var app_1 = require("../app");
-var libs_1 = require("../libs");
 var Page = /** @class */ (function (_super) {
     __extends(Page, _super);
     function Page(props) {
         var _this = _super.call(this, props) || this;
-        _this.urlQuery = new libs_1.ReactUrlQuery(_this);
         _this.setDocumentTitle = function () {
             document.title = _this.title;
         };

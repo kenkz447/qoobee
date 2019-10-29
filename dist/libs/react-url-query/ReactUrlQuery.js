@@ -10,6 +10,17 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -133,8 +144,24 @@ var ReactUrlQuery = /** @class */ (function () {
                 }
             }
             _this.originSetState(__assign(__assign({}, _this.pageInsance.state), statePart), function () {
+                var e_1, _a;
+                var currentSearch = new URLSearchParams(location.search);
+                try {
+                    for (var _b = __values(_this.registeredStateKeys), _c = _b.next(); !_c.done; _c = _b.next()) {
+                        var registeredStateKey = _c.value;
+                        currentSearch.delete(registeredStateKey);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+                var currentSearchObj = urijs_1.parseQuery(currentSearch.toString());
                 var nextLocationState = _this.locationStateFromObj(__assign({}, _this.pageInsance.state));
-                var nextQuery = urijs_1.buildQuery(nextLocationState, true);
+                var nextQuery = urijs_1.buildQuery(__assign(__assign({}, currentSearchObj), nextLocationState), true);
                 var nextSearch = nextQuery ? "?" + nextQuery : '';
                 var needsUpdateUrl = (location.search !== nextSearch);
                 if (!needsUpdateUrl) {

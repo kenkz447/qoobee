@@ -179,12 +179,28 @@ export class ReactUrlQuery<S, K extends keyof S> {
                 ...statePart
             },
             () => {
+                const currentSearch = new URLSearchParams(location.search);
+
+                for (const registeredStateKey of this.registeredStateKeys) {
+                    currentSearch.delete(registeredStateKey as string);
+                }
+
+                const currentSearchObj = parseQuery(currentSearch.toString());
+
                 const nextLocationState = this.locationStateFromObj({ ...this.pageInsance.state });
-                const nextQuery = buildQuery(nextLocationState as object, true);
+
+                const nextQuery = buildQuery(
+                    {
+                        ...currentSearchObj,
+                        ...nextLocationState as object
+                    },
+                    true
+                );
+
                 const nextSearch = nextQuery ? `?${nextQuery}` : '';
 
                 const needsUpdateUrl = (location.search !== nextSearch);
-                
+
                 if (!needsUpdateUrl) {
                     return;
                 }

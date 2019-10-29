@@ -132,4 +132,16 @@ describe('ReactUrlQuery', () => {
             } as HomePageState);
         expect(homeRenderer).toBeCalledTimes(1);
     });
+
+    it('should unregistered query params not be remove after update state', () => {
+        const nextSearchQuery = location.search + `&unregister=1`;
+        history.push(nextSearchQuery);
+
+        homePageInsance.setState({
+            ...prevHomeState,
+            paramExist: '0'
+        });
+
+        expect(location.search).toEqual('?unregister=1&paramArray=p1&paramExist=0&paramNotExist=helloSearch');
+    });
 });

@@ -18,7 +18,7 @@ export class ReactUrlQuery<S, K extends keyof S> {
     private readonly getCurrentValue = (key: K): any => {
         const queryObject = parseQuery(window.location.search) as { [name in keyof S]: any };
         const defaulValue = this.defaultValues[key];
-        const defaulValueType = typeof defaulValue;
+        const defaultValueType = typeof defaulValue;
 
         const currentParamValue = queryObject[key];
 
@@ -26,7 +26,7 @@ export class ReactUrlQuery<S, K extends keyof S> {
             return defaulValue;
         }
 
-        if (typeof currentParamValue === defaulValueType) {
+        if (typeof currentParamValue === defaultValueType) {
             return currentParamValue;
         }
 
@@ -47,7 +47,7 @@ export class ReactUrlQuery<S, K extends keyof S> {
             return currentStateValue;
         }
 
-        switch (defaulValueType) {
+        switch (defaultValueType) {
             case 'boolean':
                 return currentParamValue === 'true';
             case 'number':
@@ -130,36 +130,6 @@ export class ReactUrlQuery<S, K extends keyof S> {
         });
     }
 
-    constructor(pageInstance: React.Component<{}, S>) {
-        this.pageInsance = pageInstance;
-
-        this.originSetState = pageInstance.setState.bind(pageInstance);
-        this.pageInsance.setState = this.set;
-    }
-
-    public readonly sync = <T extends S[K]>(key: K, defaulValue?: T): T => {
-        this.registeredStateKeys.push(key);
-
-        this.defaultValues[key] = defaulValue as T;
-
-        if (!this._locationBagUnListener) {
-            this._locationBagUnListener = this.listen((nextLocationState) => {
-                this.pageInsance.setState(nextLocationState);
-            });
-        }
-
-        return this.getCurrentValue(key);
-    }
-
-    public readonly get = (key: K) => {
-        if (!this.pageInsance.state) {
-            const queryObject = parseQuery(window.location.search) as Pick<S, K>;
-            return queryObject[key];
-        }
-
-        return this.getCurrentValue(key);
-    }
-
     private readonly set: React.Component<{}, S>['setState'] = (statePart, callback?) => {
         if (!statePart) {
             return;
@@ -205,7 +175,7 @@ export class ReactUrlQuery<S, K extends keyof S> {
                     return;
                 }
 
-                history.push(nextSearch);
+                history.push(location.pathname + nextSearch);
 
                 if (!callback) {
                     return;
@@ -214,5 +184,45 @@ export class ReactUrlQuery<S, K extends keyof S> {
                 callback();
             }
         );
+    }
+
+    constructor(pageInstance: React.Component<{}, S>) {
+        this.pageInsance = pageInstance;
+
+        this.originSetState = pageInstance.setState.bind(pageInstance);
+        this.pageInsance.setState = this.set;
+    }
+    
+    public readonly getFromUrl = (key: K) => {
+        if (!this.pageInsance.state) {
+            const queryObject = parseQuery(window.location.search) as Pick<S, K>;
+            return queryObject[key];
+        }
+
+        return this.getCurrentValue(key);
+    }
+
+    public readonly syncWithUrl = <T extends S[K]>(key: K, defaulValue?: T): T => {
+        this.registeredStateKeys.push(key);
+
+        this.defaultValues[key] = defaulValue as T;
+
+        if (!this._locationBagUnListener) {
+            this._locationBagUnListener = this.listen((nextLocationState) => {
+                this.pageInsance.setState(nextLocationState);
+            });
+        }
+
+        return this.getCurrentValue(key);
+    }
+
+    public get current () {
+        return this.registeredStateKeys.reduce(
+            (result, currentKey) => {
+                result[currentKey] = this.getCurrentValue(currentKey);
+                return result;
+            },
+            {} as Pick<S, K>
+        ); 
     }
 }

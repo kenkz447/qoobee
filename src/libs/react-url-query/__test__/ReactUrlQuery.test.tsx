@@ -42,15 +42,15 @@ describe('ReactUrlQuery', () => {
 
         constructor(props: RouteComponentProps) {
             super(props);
-            
+
             this.state = {
-                paramArray: this.urlQuery.sync('paramArray', []),
-                paramExist: this.urlQuery.sync('paramExist'),
-                paramNotExist: this.urlQuery.sync('paramNotExist'),
-                paramExistWithDefault: this.urlQuery.sync('paramExistWithDefault', undefined),
-                paramNotExistWithDefault: this.urlQuery.sync('paramNotExistWithDefault', false),
-                getParamNotExist: this.urlQuery.get('getParamNotExist'),
-                getParamExist: this.urlQuery.get('getParamExist'),
+                paramArray: this.urlQuery.syncWithUrl('paramArray', []),
+                paramExist: this.urlQuery.syncWithUrl('paramExist'),
+                paramNotExist: this.urlQuery.syncWithUrl('paramNotExist'),
+                paramExistWithDefault: this.urlQuery.syncWithUrl('paramExistWithDefault', undefined),
+                paramNotExistWithDefault: this.urlQuery.syncWithUrl('paramNotExistWithDefault', false),
+                getParamNotExist: this.urlQuery.getFromUrl('getParamNotExist'),
+                getParamExist: this.urlQuery.getFromUrl('getParamExist'),
                 staticValue: 'this will never change!'
             };
         }
@@ -72,14 +72,13 @@ describe('ReactUrlQuery', () => {
     });
 
     it('should pageBag working correctly', () => {
-        expect(homePageInsance.state)
-            .toEqual({
-                ...prevHomeState,
-                paramExist: 'true',
-                paramExistWithDefault: 'true',
-                paramNotExistWithDefault: false,
-                getParamExist: 'true'
-            } as HomePageState);
+        expect(homePageInsance.urlQuery.current).toEqual({
+            paramArray: [],
+            paramExist: 'true',
+            paramExistWithDefault: 'true',
+            paramNotExist: undefined,
+            paramNotExistWithDefault: false,
+        });
 
         expect(location.search).toEqual(initSearchQuery);
     });

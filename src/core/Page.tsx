@@ -1,18 +1,15 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { RouteInfo, MenuItem } from '../Types';
+import { RouteInfo } from '../Types';
 
 import { rootContextType } from '../app';
-import { ReactUrlQuery } from '../libs';
 
 export class Page<P extends RouteComponentProps, S = {}> extends React.PureComponent<P, S> {
 
     public static readonly routeInfo: RouteInfo;
     
     public static readonly contextType = rootContextType;
-
-    public readonly urlQuery = new ReactUrlQuery(this);
 
     public get title() {
         const InheritedPage = Object.getPrototypeOf(this).constructor;

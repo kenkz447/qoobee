@@ -9,10 +9,11 @@ interface HomePageState {
     paramExist?: string;
     paramNotExist?: string;
     paramExistWithDefault?: string;
-    paramNotExistWithDefault?: string;
+    paramNotExistWithDefault?: boolean;
     getParamNotExist?: string;
     getParamExist?: string;
     staticValue: string;
+    paramArray: string[];
 }
 
 const originHistoryPush = history.push;
@@ -36,17 +37,18 @@ describe('ReactUrlQuery', () => {
     const homeRenderer = jest.fn(() => null);
     let prevHomeState: HomePageState;
 
-    class HomePage extends React.Component<{}, HomePageState> {
+    class HomePage extends React.PureComponent<{}, HomePageState> {
         public readonly urlQuery = new ReactUrlQuery(this);
 
         constructor(props: RouteComponentProps) {
             super(props);
             
             this.state = {
+                paramArray: this.urlQuery.sync('paramArray', []),
                 paramExist: this.urlQuery.sync('paramExist'),
                 paramNotExist: this.urlQuery.sync('paramNotExist'),
-                paramExistWithDefault: this.urlQuery.sync('paramExistWithDefault', 'undefined'),
-                paramNotExistWithDefault: this.urlQuery.sync('paramNotExistWithDefault', 'false'),
+                paramExistWithDefault: this.urlQuery.sync('paramExistWithDefault', undefined),
+                paramNotExistWithDefault: this.urlQuery.sync('paramNotExistWithDefault', false),
                 getParamNotExist: this.urlQuery.get('getParamNotExist'),
                 getParamExist: this.urlQuery.get('getParamExist'),
                 staticValue: 'this will never change!'
@@ -75,7 +77,7 @@ describe('ReactUrlQuery', () => {
                 ...prevHomeState,
                 paramExist: 'true',
                 paramExistWithDefault: 'true',
-                paramNotExistWithDefault: 'false',
+                paramNotExistWithDefault: false,
                 getParamExist: 'true'
             } as HomePageState);
 
@@ -93,25 +95,26 @@ describe('ReactUrlQuery', () => {
                 paramNotExist: 'true',
                 paramExist: undefined,
                 getParamNotExist: undefined,
-                paramExistWithDefault: undefined,
-                paramNotExistWithDefault: undefined
+                paramExistWithDefault: undefined
             } as HomePageState);
     });
 
     it('should update url search when setState called', () => {
         homePageInsance.setState({
+            paramArray: ['p1'],
             paramExist: 'changedToo',
             paramNotExist: 'helloSearch',
             getParamExist: undefined
         });
 
-        expect(location.search).toEqual(`?paramExist=changedToo&paramNotExist=helloSearch`);
+        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch');
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
+                paramArray: ['p1'],
                 paramExist: 'changedToo',
                 paramNotExist: 'helloSearch',
-                getParamExist: undefined
+                getParamExist: undefined,
             } as HomePageState);
         expect(homeRenderer).toBeCalledTimes(1);
     });
@@ -121,7 +124,7 @@ describe('ReactUrlQuery', () => {
             staticValue: '... it was changed'
         });
 
-        expect(location.search).toEqual(`?paramExist=changedToo&paramNotExist=helloSearch`);
+        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch');
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,

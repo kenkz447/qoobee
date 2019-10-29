@@ -36,12 +36,12 @@ var ReactUrlQuery = /** @class */ (function () {
         this.getCurrentValue = function (key) {
             var queryObject = urijs_1.parseQuery(window.location.search);
             var defaulValue = _this.defaultValues[key];
-            var defaulValueType = typeof defaulValue;
+            var defaultValueType = typeof defaulValue;
             var currentParamValue = queryObject[key];
             if (!currentParamValue) {
                 return defaulValue;
             }
-            if (typeof currentParamValue === defaulValueType) {
+            if (typeof currentParamValue === defaultValueType) {
                 return currentParamValue;
             }
             if (Array.isArray(defaulValue)) {
@@ -56,7 +56,7 @@ var ReactUrlQuery = /** @class */ (function () {
                 }
                 return currentStateValue;
             }
-            switch (defaulValueType) {
+            switch (defaultValueType) {
                 case 'boolean':
                     return currentParamValue === 'true';
                 case 'number':
@@ -115,23 +115,6 @@ var ReactUrlQuery = /** @class */ (function () {
                 callback(nextState);
             });
         };
-        this.sync = function (key, defaulValue) {
-            _this.registeredStateKeys.push(key);
-            _this.defaultValues[key] = defaulValue;
-            if (!_this._locationBagUnListener) {
-                _this._locationBagUnListener = _this.listen(function (nextLocationState) {
-                    _this.pageInsance.setState(nextLocationState);
-                });
-            }
-            return _this.getCurrentValue(key);
-        };
-        this.get = function (key) {
-            if (!_this.pageInsance.state) {
-                var queryObject = urijs_1.parseQuery(window.location.search);
-                return queryObject[key];
-            }
-            return _this.getCurrentValue(key);
-        };
         this.set = function (statePart, callback) {
             if (!statePart) {
                 return;
@@ -167,17 +150,45 @@ var ReactUrlQuery = /** @class */ (function () {
                 if (!needsUpdateUrl) {
                     return;
                 }
-                app_1.history.push(nextSearch);
+                app_1.history.push(location.pathname + nextSearch);
                 if (!callback) {
                     return;
                 }
                 callback();
             });
         };
+        this.getFromUrl = function (key) {
+            if (!_this.pageInsance.state) {
+                var queryObject = urijs_1.parseQuery(window.location.search);
+                return queryObject[key];
+            }
+            return _this.getCurrentValue(key);
+        };
+        this.syncWithUrl = function (key, defaulValue) {
+            _this.registeredStateKeys.push(key);
+            _this.defaultValues[key] = defaulValue;
+            if (!_this._locationBagUnListener) {
+                _this._locationBagUnListener = _this.listen(function (nextLocationState) {
+                    _this.pageInsance.setState(nextLocationState);
+                });
+            }
+            return _this.getCurrentValue(key);
+        };
         this.pageInsance = pageInstance;
         this.originSetState = pageInstance.setState.bind(pageInstance);
         this.pageInsance.setState = this.set;
     }
+    Object.defineProperty(ReactUrlQuery.prototype, "current", {
+        get: function () {
+            var _this = this;
+            return this.registeredStateKeys.reduce(function (result, currentKey) {
+                result[currentKey] = _this.getCurrentValue(currentKey);
+                return result;
+            }, {});
+        },
+        enumerable: true,
+        configurable: true
+    });
     return ReactUrlQuery;
 }());
 exports.ReactUrlQuery = ReactUrlQuery;

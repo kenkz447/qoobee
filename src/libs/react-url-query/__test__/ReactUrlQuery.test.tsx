@@ -1,3 +1,5 @@
+// tslint:disable:no-string-literal
+
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
 import { RouteComponentProps } from 'react-router';
@@ -14,6 +16,7 @@ interface HomePageState {
     getParamExist?: string;
     staticValue: string;
     paramArray: string[];
+    paramArrayNoDefault: string[];
 }
 
 const originHistoryPush = history.push;
@@ -31,7 +34,7 @@ history.push = (path) => {
 };
 
 describe('ReactUrlQuery', () => {
-    const initSearchQuery = `?paramExist=true&paramExistWithDefault=true&getParamExist=true`;
+    const initSearchQuery = `?paramArray=abc&paramArrayNoDefault=bcd&paramExist=true&paramExistWithDefault=true&getParamExist=true`;
     history.push(initSearchQuery);
 
     const homeRenderer = jest.fn(() => null);
@@ -45,6 +48,8 @@ describe('ReactUrlQuery', () => {
 
             this.state = {
                 paramArray: this.urlQuery.syncWithUrl('paramArray', []),
+                paramArrayNoDefault: this.urlQuery.syncWithUrl('paramArrayNoDefault'),
+
                 paramExist: this.urlQuery.syncWithUrl('paramExist'),
                 paramNotExist: this.urlQuery.syncWithUrl('paramNotExist'),
                 paramExistWithDefault: this.urlQuery.syncWithUrl('paramExistWithDefault', undefined),
@@ -73,7 +78,8 @@ describe('ReactUrlQuery', () => {
 
     it('should pageBag working correctly', () => {
         expect(homePageInsance.urlQuery.current).toEqual({
-            paramArray: [],
+            paramArray: ['abc'],
+            paramArrayNoDefault: 'bcd',
             paramExist: 'true',
             paramExistWithDefault: 'true',
             paramNotExist: undefined,
@@ -83,7 +89,7 @@ describe('ReactUrlQuery', () => {
         expect(location.search).toEqual(initSearchQuery);
     });
 
-    it('should update state when url changed', () => {
+    it('should update or reset to default state when url changed', () => {
         const nextQuery = `?paramNotExist=true`;
         history.push(nextQuery);
 
@@ -91,10 +97,8 @@ describe('ReactUrlQuery', () => {
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
-                paramNotExist: 'true',
-                paramExist: undefined,
-                getParamNotExist: undefined,
-                paramExistWithDefault: undefined
+                ...homePageInsance.urlQuery.defaultValues,
+                paramNotExist: 'true'
             } as HomePageState);
     });
 
@@ -142,5 +146,17 @@ describe('ReactUrlQuery', () => {
         });
 
         expect(location.search).toEqual('?unregister=1&paramArray=p1&paramExist=0&paramNotExist=helloSearch');
+    });
+
+    it('should unlisten when component unmounting', () => {
+        homePageInsance.urlQuery['_unListener'] = jest.fn(homePageInsance.urlQuery['_unListener']);
+
+        testRenderer.unmount();
+
+        expect(homePageInsance.urlQuery['_unmounting'])
+            .toEqual(true);
+
+        expect(homePageInsance.urlQuery['_unListener'])
+            .toBeCalled();
     });
 });

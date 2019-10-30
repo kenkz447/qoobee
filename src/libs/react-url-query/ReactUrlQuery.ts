@@ -10,10 +10,10 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
     private readonly pageInsance: React.Component<{}, S>;
     private readonly originSetState: React.Component<{}, S>['setState'];
-    private readonly defaultValues = {} as S;
 
     private readonly registeredStateKeys: K[] = [];
-    private _locationBagUnListener: UnregisterCallback;
+    private _unListener: UnregisterCallback;
+    private _unmounting = false;
 
     private readonly getCurrentValue = (key: K): any => {
         const queryObject = parseQuery(window.location.search) as { [name in keyof S]: any };
@@ -36,6 +36,10 @@ export class ReactUrlQuery<S, K extends keyof S> {
             }
 
             const nextValue = [currentParamValue];
+            if (!this.pageInsance.state) {
+                return nextValue;
+            }
+
             const currentStateValue = this.pageInsance.state[key] as any;
 
             const diffValues = difference(nextValue, currentStateValue);
@@ -85,6 +89,9 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
     private readonly listen = (callback: (newValue: Pick<S, K> | S) => void) => {
         return history.listen(() => {
+            if (this._unmounting) {
+                return;
+            }
 
             const queryObject = parseQuery(window.location.search) as Pick<S, K> | S;
 
@@ -191,8 +198,26 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
         this.originSetState = pageInstance.setState.bind(pageInstance);
         this.pageInsance.setState = this.set;
+
+        const originComponentWillUnmount = this.pageInsance.componentWillUnmount
+            ? this.pageInsance.componentWillUnmount.bind(pageInstance)
+            : undefined;
+
+        this.pageInsance.componentWillUnmount = () => {
+            this._unmounting = true;
+
+            if (this._unListener) {
+                this._unListener();
+            }
+
+            if (originComponentWillUnmount) {
+                originComponentWillUnmount();
+            }
+        };
     }
-    
+
+    public readonly defaultValues = {} as S;
+
     public readonly getFromUrl = (key: K) => {
         if (!this.pageInsance.state) {
             const queryObject = parseQuery(window.location.search) as Pick<S, K>;
@@ -207,8 +232,8 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
         this.defaultValues[key] = defaulValue as T;
 
-        if (!this._locationBagUnListener) {
-            this._locationBagUnListener = this.listen((nextLocationState) => {
+        if (!this._unListener) {
+            this._unListener = this.listen((nextLocationState) => {
                 this.pageInsance.setState(nextLocationState);
             });
         }
@@ -216,13 +241,13 @@ export class ReactUrlQuery<S, K extends keyof S> {
         return this.getCurrentValue(key);
     }
 
-    public get current () {
+    public get current() {
         return this.registeredStateKeys.reduce(
             (result, currentKey) => {
-                result[currentKey] = this.getCurrentValue(currentKey);
+                result[currentKey] = this.pageInsance.state[currentKey];
                 return result;
             },
             {} as Pick<S, K>
-        ); 
+        );
     }
 }

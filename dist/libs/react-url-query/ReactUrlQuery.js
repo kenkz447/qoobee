@@ -31,8 +31,8 @@ var app_1 = require("../../app");
 var ReactUrlQuery = /** @class */ (function () {
     function ReactUrlQuery(pageInstance) {
         var _this = this;
-        this.defaultValues = {};
         this.registeredStateKeys = [];
+        this._unmounting = false;
         this.getCurrentValue = function (key) {
             var queryObject = urijs_1.parseQuery(window.location.search);
             var defaulValue = _this.defaultValues[key];
@@ -49,6 +49,9 @@ var ReactUrlQuery = /** @class */ (function () {
                     return currentParamValue;
                 }
                 var nextValue = [currentParamValue];
+                if (!_this.pageInsance.state) {
+                    return nextValue;
+                }
                 var currentStateValue = _this.pageInsance.state[key];
                 var diffValues = difference_1.default(nextValue, currentStateValue);
                 if (diffValues.length > 0) {
@@ -85,6 +88,9 @@ var ReactUrlQuery = /** @class */ (function () {
         };
         this.listen = function (callback) {
             return app_1.history.listen(function () {
+                if (_this._unmounting) {
+                    return;
+                }
                 var queryObject = urijs_1.parseQuery(window.location.search);
                 var nextLocationState = _this.locationStateFromObj(queryObject);
                 var currentLocationState = _this.locationStateFromObj(_this.pageInsance.state);
@@ -157,6 +163,7 @@ var ReactUrlQuery = /** @class */ (function () {
                 callback();
             });
         };
+        this.defaultValues = {};
         this.getFromUrl = function (key) {
             if (!_this.pageInsance.state) {
                 var queryObject = urijs_1.parseQuery(window.location.search);
@@ -167,8 +174,8 @@ var ReactUrlQuery = /** @class */ (function () {
         this.syncWithUrl = function (key, defaulValue) {
             _this.registeredStateKeys.push(key);
             _this.defaultValues[key] = defaulValue;
-            if (!_this._locationBagUnListener) {
-                _this._locationBagUnListener = _this.listen(function (nextLocationState) {
+            if (!_this._unListener) {
+                _this._unListener = _this.listen(function (nextLocationState) {
                     _this.pageInsance.setState(nextLocationState);
                 });
             }
@@ -177,12 +184,24 @@ var ReactUrlQuery = /** @class */ (function () {
         this.pageInsance = pageInstance;
         this.originSetState = pageInstance.setState.bind(pageInstance);
         this.pageInsance.setState = this.set;
+        var originComponentWillUnmount = this.pageInsance.componentWillUnmount
+            ? this.pageInsance.componentWillUnmount.bind(pageInstance)
+            : undefined;
+        this.pageInsance.componentWillUnmount = function () {
+            _this._unmounting = true;
+            if (_this._unListener) {
+                _this._unListener();
+            }
+            if (originComponentWillUnmount) {
+                originComponentWillUnmount();
+            }
+        };
     }
     Object.defineProperty(ReactUrlQuery.prototype, "current", {
         get: function () {
             var _this = this;
             return this.registeredStateKeys.reduce(function (result, currentKey) {
-                result[currentKey] = _this.getCurrentValue(currentKey);
+                result[currentKey] = _this.pageInsance.state[currentKey];
                 return result;
             }, {});
         },

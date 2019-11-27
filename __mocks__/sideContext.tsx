@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { SideContext } from '../src/Types';
 import { WithContextProps } from '../src/libs';
+import { createSideContext } from '../src/app/createSideContext';
 
 interface GlobalModalContext {
     readonly title: string;
@@ -17,10 +18,7 @@ class GlobalModal extends React.Component<GlobalModalProps> {
     }
 }
 
-export const sideContext: SideContext<GlobalModalContext> = {
-    name: 'sideContext',
-    contextType: React.createContext({
-        title: 'Global modal'
-    }),
+export const sideContext = createSideContext({
+    name: 'GlobalModal',
     mount: GlobalModal
-};
+});

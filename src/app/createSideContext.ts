@@ -3,7 +3,7 @@ import { SideContext } from '../Types';
 import * as React from 'react';
 
 export const createSideContext = <C = {}>(
-    props: Partial<SideContext<C>> & Pick<SideContext, 'name'> & Pick<SideContext, 'mount'>
+    props: Partial<SideContext<C>> & Pick<SideContext<C>, 'name'> & Pick<SideContext<C>, 'mount'>
 ): SideContext<C> => {
 
     const event = props.event || createEvent(props.name);

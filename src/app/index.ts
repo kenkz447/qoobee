@@ -5,3 +5,4 @@ export * from './history';
 export * from './rootContextType';
 export * from './runMiddlewares';
 export * from './swRegistration';
+export * from './createSideContext';

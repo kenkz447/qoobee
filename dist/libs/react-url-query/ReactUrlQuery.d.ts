@@ -13,5 +13,5 @@ export declare class ReactUrlQuery<S, K extends keyof S> {
     readonly defaultValues: S;
     readonly getFromUrl: (key: K) => any;
     readonly syncWithUrl: <T extends S[K]>(key: K, defaulValue?: T | undefined) => T;
-    readonly current: Pick<S, K>;
+    get current(): Pick<S, K>;
 }

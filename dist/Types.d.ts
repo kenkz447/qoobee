@@ -8,7 +8,8 @@ export interface SideContext<C = {}> {
     readonly name: string;
     readonly contextType: React.Context<C>;
     readonly mount: React.ComponentType<WithContextProps<C>>;
-    readonly event?: Event<C>;
+    readonly event: Event<C>;
+    readonly setValue: Event<C>['emit'];
 }
 export interface MenuItem {
     readonly url: string;

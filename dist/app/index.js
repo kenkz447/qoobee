@@ -10,3 +10,4 @@ __export(require("./history"));
 __export(require("./rootContextType"));
 __export(require("./runMiddlewares"));
 __export(require("./swRegistration"));
+__export(require("./createSideContext"));

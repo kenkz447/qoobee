@@ -30,6 +30,7 @@ var Page = /** @class */ (function (_super) {
             document.title = _this.title;
         };
         _this.setDocumentTitle();
+        window.scrollTo({ top: 0 });
         return _this;
     }
     Object.defineProperty(Page.prototype, "title", {

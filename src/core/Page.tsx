@@ -8,7 +8,7 @@ import { rootContextType } from '../app';
 export class Page<P extends RouteComponentProps, S = {}> extends React.PureComponent<P, S> {
 
     public static readonly routeInfo: RouteInfo;
-    
+
     public static readonly contextType = rootContextType;
 
     public get title() {
@@ -19,10 +19,10 @@ export class Page<P extends RouteComponentProps, S = {}> extends React.PureCompo
         }
 
         const routeInfo = InheritedPage.routeInfo as RouteInfo;
-        const title = typeof routeInfo.title === 'string' 
-            ? routeInfo.title 
+        const title = typeof routeInfo.title === 'string'
+            ? routeInfo.title
             : routeInfo.title(this.props, this.state);
-        
+
         return title;
     }
 
@@ -33,6 +33,7 @@ export class Page<P extends RouteComponentProps, S = {}> extends React.PureCompo
     public constructor(props: P) {
         super(props);
         this.setDocumentTitle();
+        window.scrollTo({ top: 0 });
     }
 
     public componentDidUpdate() {

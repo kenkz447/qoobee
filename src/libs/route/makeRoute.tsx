@@ -35,7 +35,7 @@ export const makeRoute = (Component: AppRouteComponent) => {
                             policy={routeInfo.policies!}
                             renderDeny={() => <Redirect to="/deny" />}
                         >
-                            {() => <Component {...componentProps} />}
+                            {() => <Component key={componentProps.location.pathname} {...componentProps} />}
                         </AccessControl>
                     );
                 }}

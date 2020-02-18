@@ -33,7 +33,7 @@ exports.makeRoute = function (Component) {
     };
     if (routeInfo.policies) {
         return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps), function (componentProps) {
-            return (React.createElement(containers_1.AccessControl, { policy: routeInfo.policies, renderDeny: function () { return React.createElement(react_router_dom_1.Redirect, { to: "/deny" }); } }, function () { return React.createElement(Component, __assign({}, componentProps)); }));
+            return (React.createElement(containers_1.AccessControl, { policy: routeInfo.policies, renderDeny: function () { return React.createElement(react_router_dom_1.Redirect, { to: "/deny" }); } }, function () { return React.createElement(Component, __assign({ key: componentProps.location.pathname }, componentProps)); }));
         }));
     }
     return (React.createElement(react_router_dom_1.Route, __assign({}, routeProps, { component: Component })));

@@ -1,6 +1,6 @@
 {
     "name": "qoobee",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Qoobee!!!",
     "main": "dist/index.js",
     "repository": "github:kenkz447/qoobee",

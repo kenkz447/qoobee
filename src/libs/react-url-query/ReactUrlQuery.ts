@@ -23,12 +23,12 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
         const currentParamValue = queryObject[key];
 
-        if (!currentParamValue) {
-            return defaulValue;
-        }
-
         if (typeof currentParamValue === defaultValueType) {
             return currentParamValue;
+        }
+
+        if (currentParamValue === undefined) {
+            return defaulValue;
         }
 
         if (Array.isArray(defaulValue)) {

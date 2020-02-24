@@ -38,11 +38,11 @@ var ReactUrlQuery = /** @class */ (function () {
             var defaulValue = _this.defaultValues[key];
             var defaultValueType = typeof defaulValue;
             var currentParamValue = queryObject[key];
-            if (!currentParamValue) {
-                return defaulValue;
-            }
             if (typeof currentParamValue === defaultValueType) {
                 return currentParamValue;
+            }
+            if (currentParamValue === undefined) {
+                return defaulValue;
             }
             if (Array.isArray(defaulValue)) {
                 if (Array.isArray(currentParamValue)) {

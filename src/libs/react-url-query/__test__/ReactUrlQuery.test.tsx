@@ -94,6 +94,7 @@ describe('ReactUrlQuery', () => {
         history.push(nextQuery);
 
         expect(homeRenderer).toBeCalledTimes(1);
+        expect(location.search).toEqual('?paramNotExist=true&paramNotExistWithDefault=false');
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
@@ -110,7 +111,7 @@ describe('ReactUrlQuery', () => {
             getParamExist: undefined
         });
 
-        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch');
+        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch&paramNotExistWithDefault=false');
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
@@ -127,7 +128,7 @@ describe('ReactUrlQuery', () => {
             staticValue: '... it was changed'
         });
 
-        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch');
+        expect(location.search).toEqual('?paramArray=p1&paramExist=changedToo&paramNotExist=helloSearch&paramNotExistWithDefault=false');
         expect(homePageInsance.state)
             .toEqual({
                 ...prevHomeState,
@@ -145,7 +146,7 @@ describe('ReactUrlQuery', () => {
             paramExist: '0'
         });
 
-        expect(location.search).toEqual('?unregister=1&paramArray=p1&paramExist=0&paramNotExist=helloSearch');
+        expect(location.search).toEqual('?unregister=1&paramArray=p1&paramExist=0&paramNotExist=helloSearch&paramNotExistWithDefault=false');
     });
 
     it('should unlisten when component unmounting', () => {

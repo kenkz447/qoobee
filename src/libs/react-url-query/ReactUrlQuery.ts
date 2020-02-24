@@ -15,8 +15,9 @@ export class ReactUrlQuery<S, K extends keyof S> {
     private _unListener: UnregisterCallback;
     private _unmounting = false;
 
-    private readonly getCurrentValue = (key: K): any => {
-        const queryObject = parseQuery(window.location.search) as { [name in keyof S]: any };
+    private readonly getCurrentValue = (key: K, values?: Pick<S, K>): any => {
+        const queryObject = values || (parseQuery(window.location.search) as { [name in keyof S]: any });
+
         const defaulValue = this.defaultValues[key];
         const defaultValueType = typeof defaulValue;
 
@@ -64,7 +65,11 @@ export class ReactUrlQuery<S, K extends keyof S> {
     private readonly locationStateFromObj = (obj: Pick<S, K> | S) => {
         const originObj = this.registeredStateKeys.reduce(
             (prevResult, currentItem) => {
-                prevResult[currentItem] = obj[currentItem] || undefined!;
+                if (obj[currentItem] === null || obj[currentItem] === undefined) {
+                    prevResult[currentItem] = undefined!;
+                } else {
+                    prevResult[currentItem] = obj[currentItem];
+                }
                 return prevResult;
             },
             {} as Pick<S, K> | S
@@ -80,7 +85,10 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
                 if (originObj[key] === undefined) {
                     delete originObj[key];
+                } else {
+                    originObj[key] = this.getCurrentValue(key as K, obj);
                 }
+
             }
         }
 
@@ -108,7 +116,7 @@ export class ReactUrlQuery<S, K extends keyof S> {
             for (const key in Object(nextLocationState)) {
                 if (Object(nextLocationState).hasOwnProperty(key)) {
                     if (this.defaultValues[key]) {
-                        nextLocationState[key] = this.getCurrentValue(key as K);
+                        nextLocationState[key] = this.getCurrentValue(key as K, nextLocationState);
                     }
                 }
             }
@@ -164,7 +172,10 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
                 const currentSearchObj = parseQuery(currentSearch.toString());
 
-                const nextLocationState = this.locationStateFromObj({ ...this.pageInsance.state });
+                const nextLocationState = this.locationStateFromObj({
+                    ...this.pageInsance.state,
+                    ...statePart
+                });
 
                 const nextQuery = buildQuery(
                     {

@@ -33,8 +33,8 @@ var ReactUrlQuery = /** @class */ (function () {
         var _this = this;
         this.registeredStateKeys = [];
         this._unmounting = false;
-        this.getCurrentValue = function (key) {
-            var queryObject = urijs_1.parseQuery(window.location.search);
+        this.getCurrentValue = function (key, values) {
+            var queryObject = values || urijs_1.parseQuery(window.location.search);
             var defaulValue = _this.defaultValues[key];
             var defaultValueType = typeof defaulValue;
             var currentParamValue = queryObject[key];
@@ -70,7 +70,12 @@ var ReactUrlQuery = /** @class */ (function () {
         };
         this.locationStateFromObj = function (obj) {
             var originObj = _this.registeredStateKeys.reduce(function (prevResult, currentItem) {
-                prevResult[currentItem] = obj[currentItem] || undefined;
+                if (obj[currentItem] === null || obj[currentItem] === undefined) {
+                    prevResult[currentItem] = undefined;
+                }
+                else {
+                    prevResult[currentItem] = obj[currentItem];
+                }
                 return prevResult;
             }, {});
             for (var key in originObj) {
@@ -81,6 +86,9 @@ var ReactUrlQuery = /** @class */ (function () {
                     }
                     if (originObj[key] === undefined) {
                         delete originObj[key];
+                    }
+                    else {
+                        originObj[key] = _this.getCurrentValue(key, obj);
                     }
                 }
             }
@@ -101,7 +109,7 @@ var ReactUrlQuery = /** @class */ (function () {
                 for (var key in Object(nextLocationState)) {
                     if (Object(nextLocationState).hasOwnProperty(key)) {
                         if (_this.defaultValues[key]) {
-                            nextLocationState[key] = _this.getCurrentValue(key);
+                            nextLocationState[key] = _this.getCurrentValue(key, nextLocationState);
                         }
                     }
                 }
@@ -149,7 +157,7 @@ var ReactUrlQuery = /** @class */ (function () {
                     finally { if (e_1) throw e_1.error; }
                 }
                 var currentSearchObj = urijs_1.parseQuery(currentSearch.toString());
-                var nextLocationState = _this.locationStateFromObj(__assign({}, _this.pageInsance.state));
+                var nextLocationState = _this.locationStateFromObj(__assign(__assign({}, _this.pageInsance.state), statePart));
                 var nextQuery = urijs_1.buildQuery(__assign(__assign({}, currentSearchObj), nextLocationState), true);
                 var nextSearch = nextQuery ? "?" + nextQuery : '';
                 var needsUpdateUrl = (location.search !== nextSearch);

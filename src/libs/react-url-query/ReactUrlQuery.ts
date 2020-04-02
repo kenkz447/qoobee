@@ -189,11 +189,9 @@ export class ReactUrlQuery<S, K extends keyof S> {
 
                 const needsUpdateUrl = (location.search !== nextSearch);
 
-                if (!needsUpdateUrl) {
-                    return;
+                if (needsUpdateUrl) {
+                    history.push(location.pathname + nextSearch);
                 }
-
-                history.push(location.pathname + nextSearch);
 
                 if (!callback) {
                     return;

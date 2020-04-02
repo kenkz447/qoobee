@@ -161,10 +161,9 @@ var ReactUrlQuery = /** @class */ (function () {
                 var nextQuery = urijs_1.buildQuery(__assign(__assign({}, currentSearchObj), nextLocationState), true);
                 var nextSearch = nextQuery ? "?" + nextQuery : '';
                 var needsUpdateUrl = (location.search !== nextSearch);
-                if (!needsUpdateUrl) {
-                    return;
+                if (needsUpdateUrl) {
+                    app_1.history.push(location.pathname + nextSearch);
                 }
-                app_1.history.push(location.pathname + nextSearch);
                 if (!callback) {
                     return;
                 }

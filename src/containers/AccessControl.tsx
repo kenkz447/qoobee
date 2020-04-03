@@ -1,14 +1,18 @@
 import * as React from 'react';
 
-import { AppCoreContext, Policy } from '../Types';
+import { AppCoreContext, Policy, PolityResult } from '../Types';
 import { rootContextType } from '../app';
+
+interface AccessControlRenderProps {
+    allowed: boolean;
+    redirectUrl: string | false | undefined;
+}
 
 interface AccessControlProps {
     readonly funcKey?: string;
     readonly policy: Array<Policy | string> | Policy | string;
-    readonly children: React.ReactNode | (() => React.ReactNode);
+    readonly children: (props: AccessControlRenderProps) => React.ReactNode;
     readonly values?: any;
-    readonly renderDeny?: () => React.ReactNode;
 }
 
 function policyIsAllowed(
@@ -30,44 +34,35 @@ export class AccessControl extends React.PureComponent<AccessControlProps> {
     public render() {
         const {
             policies,
-            getContext 
+            getContext
         } = this.context;
 
         const {
             funcKey,
             policy,
             children,
-            renderDeny,
             values
         } = this.props;
 
-        if (!policies) {
-            if (typeof renderDeny === 'function') {
-                return renderDeny();
-            }
-
-            return null;
-        }
-
         const appContext = getContext();
 
-        let isAllowed: boolean = true;
+        const defaultPolicyResult: PolityResult = true;
+        let polityResult: PolityResult = defaultPolicyResult;
+
         if (Array.isArray(policy)) {
             for (const policyName of policy) {
-                isAllowed = policyIsAllowed(policies, funcKey, policyName, values, appContext);
+                polityResult = policyIsAllowed(policies, funcKey, policyName, values, appContext);
+                if (polityResult !== defaultPolicyResult) {
+                    break;
+                }
             }
         } else {
-            isAllowed = policyIsAllowed(policies, funcKey, policy, values, appContext);
+            polityResult = policyIsAllowed(policies, funcKey, policy, values, appContext);
         }
 
-        if (!isAllowed) {
-            if (typeof renderDeny === 'function') {
-                return renderDeny();
-            }
-
-            return null;
-        }
-
-        return children instanceof Function ? children() : children;
+        return children({
+            allowed: polityResult === true,
+            redirectUrl: polityResult !== true ? polityResult : false
+        });
     }
 }

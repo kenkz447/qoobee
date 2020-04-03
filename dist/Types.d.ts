@@ -2,7 +2,8 @@ import { History } from 'history';
 import { WithContextProps } from './libs';
 import { Event } from './app';
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export declare type Policy = (context: {}, funcKey?: string, values?: {}) => boolean;
+export declare type PolityResult = boolean | string;
+export declare type Policy = (context: {}, funcKey?: string, values?: {}) => PolityResult;
 export declare type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export interface SideContext<C = {}> {
     readonly name: string;

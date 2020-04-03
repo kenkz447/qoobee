@@ -47,20 +47,18 @@ var AccessControl = /** @class */ (function (_super) {
     AccessControl.prototype.render = function () {
         var e_1, _a;
         var _b = this.context, policies = _b.policies, getContext = _b.getContext;
-        var _c = this.props, funcKey = _c.funcKey, policy = _c.policy, children = _c.children, renderDeny = _c.renderDeny, values = _c.values;
-        if (!policies) {
-            if (typeof renderDeny === 'function') {
-                return renderDeny();
-            }
-            return null;
-        }
+        var _c = this.props, funcKey = _c.funcKey, policy = _c.policy, children = _c.children, values = _c.values;
         var appContext = getContext();
-        var isAllowed = true;
+        var defaultPolicyResult = true;
+        var polityResult = defaultPolicyResult;
         if (Array.isArray(policy)) {
             try {
                 for (var policy_1 = __values(policy), policy_1_1 = policy_1.next(); !policy_1_1.done; policy_1_1 = policy_1.next()) {
                     var policyName = policy_1_1.value;
-                    isAllowed = policyIsAllowed(policies, funcKey, policyName, values, appContext);
+                    polityResult = policyIsAllowed(policies, funcKey, policyName, values, appContext);
+                    if (polityResult !== defaultPolicyResult) {
+                        break;
+                    }
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -72,15 +70,12 @@ var AccessControl = /** @class */ (function (_super) {
             }
         }
         else {
-            isAllowed = policyIsAllowed(policies, funcKey, policy, values, appContext);
+            polityResult = policyIsAllowed(policies, funcKey, policy, values, appContext);
         }
-        if (!isAllowed) {
-            if (typeof renderDeny === 'function') {
-                return renderDeny();
-            }
-            return null;
-        }
-        return children instanceof Function ? children() : children;
+        return children({
+            allowed: polityResult === true,
+            redirectUrl: polityResult !== true ? polityResult : false
+        });
     };
     AccessControl.contextType = app_1.rootContextType;
     return AccessControl;

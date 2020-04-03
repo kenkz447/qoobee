@@ -4,7 +4,9 @@ import { Event } from './app';
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export type Policy = (context: {}, funcKey?: string, values?: {}) => boolean;
+export type PolityResult = boolean | string;
+
+export type Policy = (context: {}, funcKey?: string, values?: {}) => PolityResult;
 
 export type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 

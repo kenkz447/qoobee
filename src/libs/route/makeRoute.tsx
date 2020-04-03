@@ -31,11 +31,14 @@ export const makeRoute = (Component: AppRouteComponent) => {
             <Route {...routeProps}>
                 {(componentProps) => {
                     return (
-                        <AccessControl
-                            policy={routeInfo.policies!}
-                            renderDeny={() => <Redirect to="/deny" />}
-                        >
-                            {() => <Component key={componentProps.location.pathname} {...componentProps} />}
+                        <AccessControl policy={routeInfo.policies!}>
+                            {({ allowed, redirectUrl }) => {
+                                if (!allowed) {
+                                    return <Redirect to={redirectUrl || '/deny'} />;
+                                }
+
+                                return <Component key={componentProps.location.pathname} {...componentProps} />;
+                            }}
                         </AccessControl>
                     );
                 }}

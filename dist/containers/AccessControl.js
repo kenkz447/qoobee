@@ -46,9 +46,9 @@ var AccessControl = /** @class */ (function (_super) {
     }
     AccessControl.prototype.render = function () {
         var e_1, _a;
-        var _b = this.context, policies = _b.policies, getContext = _b.getContext;
-        var _c = this.props, funcKey = _c.funcKey, policy = _c.policy, children = _c.children, values = _c.values;
-        var appContext = getContext();
+        var policies = this.context.policies;
+        var _b = this.props, funcKey = _b.funcKey, policy = _b.policy, children = _b.children, values = _b.values;
+        var appContext = this.context;
         var defaultPolicyResult = true;
         var polityResult = defaultPolicyResult;
         if (Array.isArray(policy)) {

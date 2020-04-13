@@ -33,8 +33,7 @@ export class AccessControl extends React.PureComponent<AccessControlProps> {
     public static readonly contextType = rootContextType;
     public render() {
         const {
-            policies,
-            getContext
+            policies
         } = this.context;
 
         const {
@@ -44,7 +43,7 @@ export class AccessControl extends React.PureComponent<AccessControlProps> {
             values
         } = this.props;
 
-        const appContext = getContext();
+        const appContext = this.context;
 
         const defaultPolicyResult: PolityResult = true;
         let polityResult: PolityResult = defaultPolicyResult;

@@ -1,5 +1,4 @@
 import {
-    createBrowserHistory,
     History,
     LocationDescriptorObject
 } from 'history';
@@ -73,7 +72,8 @@ class HistoryMiddlewareInjected extends React.PureComponent<HistoryMiddlewarePro
     }
 
     private readonly createHistory = () => {
-        const history = createBrowserHistory();
+        const { history } = this.props;
+
         const middleWares = this.createHistoryMiddleware(history);
         return this.applyHistoryMiddeware(history, middleWares);
     }

@@ -20,7 +20,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var history_1 = require("history");
 var React = __importStar(require("react"));
 var app_1 = require("../app");
 var libs_1 = require("../libs");
@@ -66,7 +65,7 @@ var HistoryMiddlewareInjected = /** @class */ (function (_super) {
             return history;
         };
         _this.createHistory = function () {
-            var history = history_1.createBrowserHistory();
+            var history = _this.props.history;
             var middleWares = _this.createHistoryMiddleware(history);
             return _this.applyHistoryMiddeware(history, middleWares);
         };

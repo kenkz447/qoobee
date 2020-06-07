@@ -162,7 +162,7 @@ var ReactUrlQuery = /** @class */ (function () {
                 var nextSearch = nextQuery ? "?" + nextQuery : '';
                 var needsUpdateUrl = (location.search !== nextSearch);
                 if (needsUpdateUrl) {
-                    app_1.history.push(location.pathname + nextSearch);
+                    app_1.history.replace(location.pathname + nextSearch);
                 }
                 if (!callback) {
                     return;

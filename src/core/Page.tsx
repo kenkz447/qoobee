@@ -14,7 +14,7 @@ export class Page<P extends RouteComponentProps, S = {}> extends React.PureCompo
     public get title() {
         const InheritedPage = Object.getPrototypeOf(this).constructor;
 
-        if (!InheritedPage.hasOwnProperty('routeInfo')) {
+        if (!('routeInfo' in InheritedPage)) {
             return 'Untitle page';
         }
 

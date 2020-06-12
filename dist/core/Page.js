@@ -36,7 +36,7 @@ var Page = /** @class */ (function (_super) {
     Object.defineProperty(Page.prototype, "title", {
         get: function () {
             var InheritedPage = Object.getPrototypeOf(this).constructor;
-            if (!InheritedPage.hasOwnProperty('routeInfo')) {
+            if (!('routeInfo' in InheritedPage)) {
                 return 'Untitle page';
             }
             var routeInfo = InheritedPage.routeInfo;

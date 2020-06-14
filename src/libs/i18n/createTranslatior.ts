@@ -1,11 +1,14 @@
 interface CreateTranslatiorProps {
     readonly resources: { readonly [langkey: string]: {} };
+    readonly defaultLangue?: string;
 }
 
 export const createTranslatior = ({
-    resources
+    resources,
+    defaultLangue
 }: CreateTranslatiorProps) => {
-    const lang = localStorage.getItem('lang');
+    const lang = localStorage.getItem('lang') ?? defaultLangue;
+    
     return (source: string) => {
         if (!lang) {
             return source;
